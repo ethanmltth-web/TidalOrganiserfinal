@@ -7,37 +7,39 @@ $emailRaw = 'guest';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App – TIDAL ORGANISER</title>
+  <title>App – Bluely</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="wave-bg" aria-hidden="true"></div>
+  <div class="theme-bg-stack" id="theme-bg-stack" aria-hidden="true">
+    <div class="wave-bg wave-bg-classic"></div>
+    <div class="wave-bg wave-bg-dark"></div>
+  </div>
 
   <div class="app-shell">
-    <aside class="app-sidebar">
-      <div class="app-sidebar-title">Tidal</div>
-      <nav class="app-sidebar-nav">
+    <div class="app-content">
+      <header class="app-header">
+        <div class="app-logo">Bluely</div>
+        <button type="button" class="app-welcome-name" id="app-name-btn" title="Click to change your name" aria-label="Welcome, click to change your name">
+          Welcome <span class="app-welcome-name-value" id="app-name-display">your name</span>
+        </button>
+        <nav class="app-nav" aria-label="Bluely stats">
+          <div class="app-points" id="app-points-display">Points: 0</div>
+          <div class="app-shards" id="app-shards-display">Shards: 0</div>
+          <div class="app-streak" id="app-streak-display">🔥 Streak: 0</div>
+        </nav>
+      </header>
+
+      <nav class="app-top-nav app-sidebar-nav" aria-label="Main navigation">
         <button type="button" class="app-sidebar-item is-active" id="sidebar-main-btn">Main Menu</button>
         <button type="button" class="app-sidebar-item" id="sidebar-schedule-btn">Schedule</button>
         <button type="button" class="app-sidebar-item" id="sidebar-whiteboard-btn">Whiteboard</button>
         <button type="button" class="app-sidebar-item" id="sidebar-customisation-btn">Customisation</button>
         <button type="button" class="app-sidebar-item" id="sidebar-focus-btn">Focus</button>
       </nav>
-    </aside>
-
-    <div class="app-content">
-      <header class="app-header">
-        <div class="app-logo">TIDAL ORGANISER</div>
-        <nav class="app-nav" aria-label="Tidal Organiser actions">
-          <div class="app-points" id="app-points-display">Points: 0</div>
-          <div class="app-shards" id="app-shards-display">Shards: 0</div>
-          <div class="app-streak" id="app-streak-display">🔥 Streak: 0</div>
-          <button type="button" class="app-name-btn" id="app-name-btn" title="Change name">Set name</button>
-        </nav>
-      </header>
 
       <main class="app-main">
     <section id="apps-panel"
@@ -46,9 +48,13 @@ $emailRaw = 'guest';
              aria-label="Main menu panel">
       <h2 class="section-title">Main Menu</h2>
       <div class="apps-toolbar">
-        <button type="button" class="add-link-btn" id="add-link-btn">Add link</button>
-        <button type="button" class="add-link-btn" id="make-folder-btn">Make folder</button>
-        <button type="button" class="add-link-btn" id="edit-apps-btn">Edit apps</button>
+        <button type="button" class="add-link-btn add-link-btn-icon-only" id="add-link-btn" title="Add link" aria-label="Add link">+</button>
+        <button type="button" class="add-link-btn add-link-btn-icon-only" id="make-folder-btn" title="Make folder" aria-label="Make folder">
+          <img src="assets/folder-icon.png" alt="" class="toolbar-btn-icon" width="22" height="22">
+        </button>
+        <button type="button" class="add-link-btn add-link-btn-icon-only" id="edit-apps-btn" title="Edit apps" aria-label="Edit apps">
+          <img src="assets/edit-icon.png" alt="" class="toolbar-btn-icon toolbar-btn-icon--edit" width="22" height="22">
+        </button>
       </div>
       <section class="upcoming-panel" id="upcoming-panel" aria-labelledby="upcoming-title">
         <div class="upcoming-header">
@@ -211,37 +217,8 @@ $emailRaw = 'guest';
       <div class="customisation-card">
         <h3 class="customisation-title">Styles</h3>
         <div class="customisation-style-list">
-          <button type="button" class="custom-style-btn is-active" data-theme="ocean">Ocean Blue</button>
+          <button type="button" class="custom-style-btn is-active" data-theme="ocean">Classic</button>
           <button type="button" class="custom-style-btn" data-theme="dark">Dark Mode</button>
-          <button type="button" class="custom-style-btn" data-theme="space">Space</button>
-          <button type="button" class="custom-style-btn" data-theme="volcano">Volcano</button>
-          <button type="button" class="custom-style-btn" data-theme="forest">Forest</button>
-          <button type="button" class="custom-style-btn" data-theme="sunset">Sunset</button>
-          <button type="button" class="custom-style-btn" data-theme="lavender">Lavender</button>
-          <button type="button" class="custom-style-btn" data-theme="neon">Neon Grid</button>
-          <button type="button" class="custom-style-btn" data-theme="sand">Sand Dunes</button>
-          <button type="button" class="custom-style-btn" data-theme="midnight">Midnight Blue</button>
-        </div>
-        <div class="unlockable-styles-panel" aria-labelledby="unlockable-styles-title">
-          <h4 class="unlockable-styles-title" id="unlockable-styles-title">Unlockable Styles</h4>
-          <div class="unlockable-style-card" id="unlockable-steph-card">
-            <div class="unlockable-style-meta">
-              <p class="unlockable-style-name">Curry</p>
-            </div>
-            <div class="unlockable-style-actions">
-              <button type="button" class="custom-style-btn unlockable-style-action" id="unlock-steph-btn">Unlock</button>
-              <span class="unlockable-style-status" id="unlock-steph-status"></span>
-            </div>
-          </div>
-          <div class="unlockable-style-card" id="unlockable-waterpokemon-card">
-            <div class="unlockable-style-meta">
-              <p class="unlockable-style-name">Water</p>
-            </div>
-            <div class="unlockable-style-actions">
-              <button type="button" class="custom-style-btn unlockable-style-action" id="unlock-water-pokemon-btn">Unlock</button>
-              <span class="unlockable-style-status" id="unlock-water-pokemon-status"></span>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -254,15 +231,13 @@ $emailRaw = 'guest';
     <div class="page-transition-panel page-transition-panel-right" aria-hidden="true"></div>
   </div>
 
-  <div class="name-prompt-overlay" id="name-prompt-overlay" aria-hidden="true">
-    <div class="name-prompt-card">
-      <h3 class="name-prompt-title">What’s your name?</h3>
-      <p class="name-prompt-subtitle">We’ll remember it on this device.</p>
-      <form class="name-prompt-form" id="name-prompt-form">
-        <input type="text" class="add-link-input" id="name-prompt-input" placeholder="Enter your name" maxlength="30" autocomplete="name">
-        <div class="name-prompt-actions">
-          <button type="submit" class="add-link-btn">Save</button>
-          <button type="button" class="plinko-back-btn" id="name-prompt-skip-btn">Skip</button>
+  <div class="welcome-screen" id="welcome-screen" aria-hidden="true">
+    <div class="welcome-screen-backdrop" aria-hidden="true"></div>
+    <div class="welcome-screen-inner">
+      <h1 class="welcome-screen-greeting" id="welcome-screen-greeting">Hi, What's your name?</h1>
+      <form class="welcome-screen-form" id="welcome-screen-form">
+        <div class="welcome-screen-input-wrap">
+          <input type="text" class="welcome-screen-input" id="welcome-screen-input" placeholder="Your name" maxlength="30" autocomplete="name" aria-label="Your name">
         </div>
       </form>
     </div>
@@ -351,10 +326,17 @@ $emailRaw = 'guest';
       var transitionEl = document.getElementById('page-transition');
       var transitionLock = false;
       var DISPLAY_NAME_KEY = 'tidal_organiser_display_name';
-      var nameOverlay = document.getElementById('name-prompt-overlay');
-      var nameForm = document.getElementById('name-prompt-form');
-      var nameInput = document.getElementById('name-prompt-input');
-      var nameSkipBtn = document.getElementById('name-prompt-skip-btn');
+      var welcomeScreen = document.getElementById('welcome-screen');
+      var welcomeGreeting = document.getElementById('welcome-screen-greeting');
+      var welcomeForm = document.getElementById('welcome-screen-form');
+      var welcomeInput = document.getElementById('welcome-screen-input');
+      var welcomeDismissTimer = null;
+      var welcomeIsEditMode = false;
+      var welcomeSequenceActive = false;
+      var WELCOME_FADE_MS = 550;
+      var WELCOME_NICE_MS = 1000;
+      var WELCOME_BG_DELAY_MS = 400;
+      var WELCOME_BG_FADE_MS = 650;
       var nameBtn = document.getElementById('app-name-btn');
 
       function playPageTransition(onDone) {
@@ -596,9 +578,6 @@ $emailRaw = 'guest';
       var THEME_STORAGE_KEY = 'tidal_organiser_theme:' + USER_STORAGE_SUFFIX;
       var SHARDS_STORAGE_KEY = 'tidal_organiser_shards:' + USER_STORAGE_SUFFIX;
       var QUESTS_STORAGE_KEY = 'tidal_organiser_daily_quests:' + USER_STORAGE_SUFFIX;
-      var UNLOCKABLES_STORAGE_KEY = 'tidal_organiser_unlockables:' + USER_STORAGE_SUFFIX;
-      var STEPH_THEME_UNLOCK_COST = 120;
-      var WATER_POKEMON_THEME_SHARD_COST = 2;
       var allSchedulesDateFilter = 'all';
       var allSchedulesSortMode = 'smart';
       var MOTIVATION_DATE_STORAGE_KEY = 'tidal_organiser_motivation_day:' + USER_STORAGE_SUFFIX;
@@ -651,58 +630,227 @@ $emailRaw = 'guest';
       }
 
       function renderDisplayName() {
-        if (!nameBtn) return;
+        var nameDisplay = document.getElementById('app-name-display');
+        if (!nameBtn || !nameDisplay) return;
         var n = getDisplayName();
-        nameBtn.textContent = n ? n : 'Set name';
+        nameDisplay.textContent = n || 'your name';
+        nameBtn.setAttribute('aria-label', n ? ('Welcome ' + n + ', click to change your name') : 'Welcome, click to set your name');
+        nameBtn.setAttribute('title', n ? 'Click to change your name' : 'Click to set your name');
       }
 
-      function openNamePrompt(force) {
-        if (!nameOverlay) return;
-        if (!force && getDisplayName()) return;
-        nameOverlay.classList.add('is-open');
-        nameOverlay.setAttribute('aria-hidden', 'false');
-        if (nameInput) {
-          nameInput.value = getDisplayName();
-          setTimeout(function () { nameInput.focus(); nameInput.select(); }, 0);
+      function setWelcomeAskMode() {
+        if (welcomeGreeting) welcomeGreeting.textContent = "Hi, What's your name?";
+        if (welcomeForm) welcomeForm.hidden = false;
+        if (welcomeInput) welcomeInput.value = getDisplayName();
+      }
+
+      function setWelcomeBackMode(name) {
+        if (welcomeGreeting) welcomeGreeting.textContent = 'Hi ' + name + ', Welcome back!';
+        if (welcomeForm) welcomeForm.hidden = true;
+      }
+
+      function welcomeWait(ms) {
+        return new Promise(function (resolve) {
+          setTimeout(resolve, ms);
+        });
+      }
+
+      function resetWelcomeAnimState() {
+        if (!welcomeScreen) return;
+        welcomeScreen.classList.remove('is-content-visible', 'is-content-fading-out', 'is-bg-fading-out');
+        document.body.classList.remove('welcome-screen-revealing-app');
+      }
+
+      function fadeWelcomeContentIn() {
+        if (!welcomeScreen) return;
+        welcomeScreen.classList.remove('is-content-fading-out');
+        welcomeScreen.classList.add('is-content-visible');
+      }
+
+      function fadeWelcomeContentOut() {
+        return new Promise(function (resolve) {
+          if (!welcomeScreen) {
+            resolve();
+            return;
+          }
+          welcomeScreen.classList.remove('is-content-visible');
+          welcomeScreen.classList.add('is-content-fading-out');
+          var settled = false;
+          function done() {
+            if (settled) return;
+            settled = true;
+            resolve();
+          }
+          if (welcomeGreeting) {
+            welcomeGreeting.addEventListener('transitionend', function onEnd(e) {
+              if (e.propertyName !== 'opacity') return;
+              welcomeGreeting.removeEventListener('transitionend', onEnd);
+              done();
+            });
+          }
+          setTimeout(done, WELCOME_FADE_MS + 80);
+        });
+      }
+
+      function fadeWelcomeBackgroundOut() {
+        return new Promise(function (resolve) {
+          if (!welcomeScreen) {
+            resolve();
+            return;
+          }
+          var backdrop = welcomeScreen.querySelector('.welcome-screen-backdrop');
+          document.body.classList.add('welcome-screen-revealing-app');
+          welcomeScreen.classList.add('is-bg-fading-out');
+          var settled = false;
+          function done() {
+            if (settled) return;
+            settled = true;
+            resolve();
+          }
+          if (backdrop) {
+            backdrop.addEventListener('transitionend', function onEnd(e) {
+              if (e.target !== backdrop || e.propertyName !== 'opacity') return;
+              backdrop.removeEventListener('transitionend', onEnd);
+              done();
+            });
+          }
+          setTimeout(done, WELCOME_BG_FADE_MS + 80);
+        });
+      }
+
+      function fadeWelcomeBackgroundOutAfterDelay() {
+        return welcomeWait(WELCOME_BG_DELAY_MS).then(fadeWelcomeBackgroundOut);
+      }
+
+      function finishWelcomeExit() {
+        welcomeSequenceActive = false;
+        if (welcomeDismissTimer) {
+          clearTimeout(welcomeDismissTimer);
+          welcomeDismissTimer = null;
+        }
+        if (!welcomeScreen) return;
+        welcomeScreen.classList.remove('is-open');
+        welcomeScreen.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('welcome-screen-active');
+        resetWelcomeAnimState();
+      }
+
+      function runWelcomeBackExit() {
+        if (welcomeSequenceActive) return;
+        welcomeSequenceActive = true;
+        if (welcomeDismissTimer) {
+          clearTimeout(welcomeDismissTimer);
+          welcomeDismissTimer = null;
+        }
+        fadeWelcomeContentOut()
+          .then(fadeWelcomeBackgroundOutAfterDelay)
+          .then(finishWelcomeExit);
+      }
+
+      function runNiceToMeetYouSequence(name) {
+        if (welcomeSequenceActive) return;
+        welcomeSequenceActive = true;
+        fadeWelcomeContentOut()
+          .then(function () {
+            if (welcomeForm) welcomeForm.hidden = true;
+            if (welcomeGreeting) welcomeGreeting.textContent = 'Nice to meet you ' + name + '!';
+            welcomeScreen.classList.remove('is-content-fading-out');
+            void welcomeScreen.offsetWidth;
+            fadeWelcomeContentIn();
+            return welcomeWait(WELCOME_NICE_MS);
+          })
+          .then(fadeWelcomeContentOut)
+          .then(fadeWelcomeBackgroundOutAfterDelay)
+          .then(finishWelcomeExit);
+      }
+
+      function runWelcomeQuickExit() {
+        if (welcomeSequenceActive) return;
+        welcomeSequenceActive = true;
+        fadeWelcomeContentOut()
+          .then(fadeWelcomeBackgroundOutAfterDelay)
+          .then(finishWelcomeExit);
+      }
+
+      function closeWelcomeScreen() {
+        finishWelcomeExit();
+      }
+
+      function openWelcomeScreen(options) {
+        if (!welcomeScreen) return;
+        var forceEdit = options && options.forceEdit;
+        var savedName = getDisplayName();
+        welcomeIsEditMode = !!forceEdit;
+        welcomeSequenceActive = false;
+
+        if (forceEdit) {
+          setWelcomeAskMode();
+        } else if (savedName) {
+          setWelcomeBackMode(savedName);
+        } else {
+          setWelcomeAskMode();
+        }
+
+        resetWelcomeAnimState();
+        document.body.classList.add('welcome-screen-active');
+        welcomeScreen.classList.add('is-open');
+        welcomeScreen.setAttribute('aria-hidden', 'false');
+
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            fadeWelcomeContentIn();
+          });
+        });
+
+        if (welcomeForm && welcomeForm.hidden) {
+          welcomeDismissTimer = setTimeout(runWelcomeBackExit, 2600);
+        } else if (welcomeInput) {
+          setTimeout(function () {
+            welcomeInput.focus();
+            welcomeInput.select();
+          }, WELCOME_FADE_MS + 120);
         }
       }
 
-      function closeNamePrompt() {
-        if (!nameOverlay) return;
-        nameOverlay.classList.remove('is-open');
-        nameOverlay.setAttribute('aria-hidden', 'true');
+      function openNamePrompt(force) {
+        if (!force) {
+          openWelcomeScreen({ forceEdit: false });
+          return;
+        }
+        openWelcomeScreen({ forceEdit: true });
       }
 
       if (nameBtn) nameBtn.addEventListener('click', function () { openNamePrompt(true); });
-      if (nameOverlay) {
-        nameOverlay.addEventListener('click', function (e) {
-          if (e.target === nameOverlay) closeNamePrompt();
+      if (welcomeScreen) {
+        welcomeScreen.addEventListener('click', function () {
+          if (welcomeSequenceActive) return;
+          if (welcomeForm && !welcomeForm.hidden) return;
+          runWelcomeBackExit();
         });
       }
-      if (nameSkipBtn) nameSkipBtn.addEventListener('click', closeNamePrompt);
-      if (nameForm && nameInput) {
-        nameForm.addEventListener('submit', function (e) {
+      if (welcomeForm && welcomeInput) {
+        welcomeForm.addEventListener('submit', function (e) {
           e.preventDefault();
-          var next = (nameInput.value || '').trim();
-          if (next) setDisplayName(next);
-          closeNamePrompt();
+          if (welcomeSequenceActive) return;
+          var next = (welcomeInput.value || '').trim();
+          if (!next) return;
+          var wasAskingName = welcomeForm && !welcomeForm.hidden;
+          setDisplayName(next);
+          if (wasAskingName && !welcomeIsEditMode) {
+            runNiceToMeetYouSequence(next);
+          } else {
+            runWelcomeQuickExit();
+          }
+        });
+        welcomeForm.addEventListener('click', function (e) {
+          e.stopPropagation();
         });
       }
 
-      var THEME_OPTIONS = ['ocean', 'dark', 'space', 'volcano', 'forest', 'sunset', 'lavender', 'neon', 'sand', 'midnight', 'steph', 'waterpokemon'];
+      var THEME_OPTIONS = ['ocean', 'dark'];
       var THEME_SOUND_PROFILES = {
-        ocean:   { wave: 'sine',     base: 520, accent: 780, type: 'lowpass',  q: 0.75 },
-        dark:    { wave: 'triangle', base: 240, accent: 380, type: 'lowpass',  q: 0.95 },
-        space:   { wave: 'triangle', base: 680, accent: 1020, type: 'highpass', q: 1.25 },
-        volcano: { wave: 'sawtooth', base: 170, accent: 260, type: 'bandpass', q: 1.8 },
-        forest:  { wave: 'sine',     base: 340, accent: 520, type: 'bandpass', q: 0.7 },
-        sunset:  { wave: 'triangle', base: 430, accent: 640, type: 'lowpass',  q: 0.8 },
-        lavender:{ wave: 'sine',     base: 460, accent: 720, type: 'bandpass', q: 1.1 },
-        neon:    { wave: 'square',   base: 900, accent: 1400, type: 'highpass', q: 2.1 },
-        sand:    { wave: 'triangle', base: 300, accent: 470, type: 'lowpass',  q: 0.6 },
-        midnight:{ wave: 'sine',     base: 280, accent: 460, type: 'bandpass', q: 1.05 },
-        steph:   { wave: 'triangle', base: 360, accent: 600, type: 'bandpass', q: 1.4 },
-        waterpokemon: { wave: 'sine', base: 560, accent: 860, type: 'bandpass', q: 1.2 }
+        ocean: { wave: 'sine',     base: 520, accent: 780, type: 'lowpass', q: 0.75 },
+        dark:  { wave: 'triangle', base: 240, accent: 380, type: 'lowpass', q: 0.95 }
       };
       var PRESET_APPS = [
         { name: 'Google Docs', url: 'https://docs.google.com/' },
@@ -725,7 +873,7 @@ $emailRaw = 'guest';
       var GOOGLE_DOCS_ICON_PATH = 'assets/google-docs-logo.png';
       var GOOGLE_SLIDES_ICON_PATH = 'assets/google-slides-logo.png';
       var GMAIL_ICON_PATH = 'assets/gmail-logo.png';
-      var TIDAL_STORE_ICON_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%230ea5e9'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='8' y='18' width='48' height='38' rx='10' fill='url(%23g)'/%3E%3Cpath d='M20 23c0-7 5-11 12-11s12 4 12 11' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M17 31h30M17 38h30' stroke='%23fff' stroke-opacity='.8' stroke-width='2'/%3E%3C/svg%3E";
+      var TIDAL_STORE_ICON_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%2385b5f7'/%3E%3Cstop offset='1' stop-color='%236b9aed'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='8' y='18' width='48' height='38' rx='10' fill='url(%23g)'/%3E%3Cpath d='M20 23c0-7 5-11 12-11s12 4 12 11' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M17 31h30M17 38h30' stroke='%23fff' stroke-opacity='.8' stroke-width='2'/%3E%3C/svg%3E";
       var tidalStoreShowAll = false;
       var activeStoreApp = null;
 
@@ -774,7 +922,6 @@ $emailRaw = 'guest';
         if (id.indexOf('focus-mode-exit') >= 0 || id.indexOf('back') >= 0 || id.indexOf('cancel') >= 0) return 'soft';
         if (cls.indexOf('custom-style-btn') >= 0 || id.indexOf('style-') >= 0) return 'theme';
         if (cls.indexOf('upcoming-status-btn') >= 0) return 'toggle';
-        if (id.indexOf('unlock') >= 0) return 'unlock';
         return 'default';
       }
 
@@ -794,11 +941,10 @@ $emailRaw = 'guest';
             toggle: 20,
             theme: 55,
             confirm: 90,
-            danger: -70,
-            unlock: 120
+            danger: -70
           };
           var start = ctx.currentTime + 0.005;
-          var duration = variant === 'theme' ? 0.13 : (variant === 'unlock' ? 0.16 : 0.1);
+          var duration = variant === 'theme' ? 0.13 : 0.1;
           var baseFreq = Math.max(120, profile.base + (offsetByVariant[variant] || 0));
           var accentFreq = Math.max(180, profile.accent + (offsetByVariant[variant] || 0) * 1.2);
 
@@ -840,7 +986,6 @@ $emailRaw = 'guest';
         if (!pointsEl) return;
         pointsEl.textContent = 'Points: ' + getPoints();
         if (shardsEl) shardsEl.textContent = 'Shards: ' + getShards();
-        renderUnlockableStyles();
       }
 
       function setPoints(points) {
@@ -911,86 +1056,33 @@ $emailRaw = 'guest';
         showStreakLoginOverlay(streak);
       }
 
-      function getUnlockableState() {
-        try {
-          var raw = localStorage.getItem(UNLOCKABLES_STORAGE_KEY);
-          var state = raw ? JSON.parse(raw) : {};
-          return state && typeof state === 'object' ? state : {};
-        } catch (e) {
-          return {};
-        }
-      }
-
-      function saveUnlockableState(state) {
-        try {
-          localStorage.setItem(UNLOCKABLES_STORAGE_KEY, JSON.stringify(state || {}));
-        } catch (e) {}
-      }
-
-      function isThemeUnlocked(themeName) {
-        if (themeName !== 'steph' && themeName !== 'waterpokemon') return true;
-        var state = getUnlockableState();
-        if (themeName === 'steph') return !!state.stephUnlocked;
-        return !!state.waterPokemonUnlocked;
-      }
-
-      function applyTheme(themeName) {
-        var allowedThemes = THEME_OPTIONS;
-        var theme = allowedThemes.indexOf(themeName) >= 0 ? themeName : 'ocean';
-        if (!isThemeUnlocked(theme)) theme = 'ocean';
-        allowedThemes.forEach(function (name) {
+      function applyTheme(themeName, options) {
+        var theme = THEME_OPTIONS.indexOf(themeName) >= 0 ? themeName : 'ocean';
+        var instant = options && options.instant;
+        var bgStack = document.getElementById('theme-bg-stack');
+        if (bgStack && instant) bgStack.classList.add('is-instant');
+        THEME_OPTIONS.forEach(function (name) {
           document.body.classList.toggle('theme-' + name, name === theme);
         });
         document.querySelectorAll('.custom-style-btn[data-theme]').forEach(function (btn) {
           btn.classList.toggle('is-active', btn.getAttribute('data-theme') === theme);
         });
+        if (bgStack && instant) {
+          requestAnimationFrame(function () {
+            bgStack.classList.remove('is-instant');
+          });
+        }
       }
 
       function saveTheme(themeName) {
-        var allowedThemes = THEME_OPTIONS;
-        var safeTheme = allowedThemes.indexOf(themeName) >= 0 ? themeName : 'ocean';
-        if (!isThemeUnlocked(safeTheme)) safeTheme = 'ocean';
+        var safeTheme = THEME_OPTIONS.indexOf(themeName) >= 0 ? themeName : 'ocean';
         localStorage.setItem(THEME_STORAGE_KEY, safeTheme);
-      }
-
-      function renderUnlockableStyles() {
-        var unlockBtn = document.getElementById('unlock-steph-btn');
-        var statusEl = document.getElementById('unlock-steph-status');
-        var waterBtn = document.getElementById('unlock-water-pokemon-btn');
-        var waterStatusEl = document.getElementById('unlock-water-pokemon-status');
-        if (!unlockBtn || !statusEl) return;
-        var unlocked = isThemeUnlocked('steph');
-        var points = getPoints();
-        var canUnlock = points >= STEPH_THEME_UNLOCK_COST;
-        if (unlocked) {
-          unlockBtn.disabled = false;
-          unlockBtn.textContent = 'Apply Curry';
-          statusEl.textContent = 'Unlocked';
-        } else {
-          unlockBtn.disabled = !canUnlock;
-          unlockBtn.textContent = 'Unlock (' + STEPH_THEME_UNLOCK_COST + ' pts)';
-          statusEl.textContent = canUnlock ? 'Ready to unlock' : 'Need ' + (STEPH_THEME_UNLOCK_COST - points) + ' more points';
-        }
-
-        if (waterBtn && waterStatusEl) {
-          var waterUnlocked = isThemeUnlocked('waterpokemon');
-          var shards = getShards();
-          var canUnlockWater = shards >= WATER_POKEMON_THEME_SHARD_COST;
-          if (waterUnlocked) {
-            waterBtn.disabled = false;
-            waterBtn.textContent = 'Apply Water';
-            waterStatusEl.textContent = 'Unlocked';
-          } else {
-            waterBtn.disabled = !canUnlockWater;
-            waterBtn.textContent = 'Unlock (' + WATER_POKEMON_THEME_SHARD_COST + ' shards)';
-            waterStatusEl.textContent = canUnlockWater ? 'Ready to unlock' : 'Need ' + (WATER_POKEMON_THEME_SHARD_COST - shards) + ' more shards';
-          }
-        }
       }
 
       function initThemeControls() {
         var saved = localStorage.getItem(THEME_STORAGE_KEY) || 'ocean';
-        applyTheme(saved);
+        if (THEME_OPTIONS.indexOf(saved) < 0) saved = 'ocean';
+        applyTheme(saved, { instant: true });
         document.querySelectorAll('.custom-style-btn[data-theme]').forEach(function (btn) {
           btn.addEventListener('click', function () {
             var theme = btn.getAttribute('data-theme') || 'ocean';
@@ -998,41 +1090,6 @@ $emailRaw = 'guest';
             applyTheme(theme);
           });
         });
-        var unlockBtn = document.getElementById('unlock-steph-btn');
-        if (unlockBtn) {
-          unlockBtn.addEventListener('click', function () {
-            var unlocked = isThemeUnlocked('steph');
-            if (!unlocked) {
-              var points = getPoints();
-              if (points < STEPH_THEME_UNLOCK_COST) return;
-              setPoints(points - STEPH_THEME_UNLOCK_COST);
-              var state = getUnlockableState();
-              state.stephUnlocked = true;
-              saveUnlockableState(state);
-            }
-            saveTheme('steph');
-            applyTheme('steph');
-            renderUnlockableStyles();
-          });
-        }
-        var waterBtn = document.getElementById('unlock-water-pokemon-btn');
-        if (waterBtn) {
-          waterBtn.addEventListener('click', function () {
-            var unlocked = isThemeUnlocked('waterpokemon');
-            if (!unlocked) {
-              var shards = getShards();
-              if (shards < WATER_POKEMON_THEME_SHARD_COST) return;
-              setShards(shards - WATER_POKEMON_THEME_SHARD_COST);
-              var state = getUnlockableState();
-              state.waterPokemonUnlocked = true;
-              saveUnlockableState(state);
-            }
-            saveTheme('waterpokemon');
-            applyTheme('waterpokemon');
-            renderUnlockableStyles();
-          });
-        }
-        renderUnlockableStyles();
       }
 
       function showStreakLoginOverlay(streak) {
@@ -1496,7 +1553,8 @@ $emailRaw = 'guest';
         var grid = document.getElementById('app-links-grid');
         if (editBtn) {
           editBtn.classList.toggle('is-active', appEditMode);
-          editBtn.textContent = appEditMode ? 'Done editing' : 'Edit apps';
+          editBtn.setAttribute('aria-label', appEditMode ? 'Done editing' : 'Edit apps');
+          editBtn.setAttribute('title', appEditMode ? 'Done editing' : 'Edit apps');
         }
         if (grid) {
           grid.classList.toggle('is-editing', appEditMode);
@@ -1525,6 +1583,7 @@ $emailRaw = 'guest';
           card.setAttribute('data-type', item.type);
           card.setAttribute('title', item.type === 'folder' ? (item.name || 'Folder') : item.url);
           if (item.type === 'folder') card.classList.add('app-link-folder');
+          if (isTidalStoreLink(item)) card.classList.add('app-link-card--tidal-store');
           if (appEditMode) card.classList.add('app-link-card-editing');
 
           if (item.type === 'folder') {
@@ -2421,7 +2480,7 @@ $emailRaw = 'guest';
       updateDailyStreakOnLogin();
       initThemeControls();
       renderDisplayName();
-      openNamePrompt(false);
+      openWelcomeScreen({ forceEdit: false });
       // Games removed
 
       // Schedule: local date/time calendar

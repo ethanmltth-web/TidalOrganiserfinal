@@ -1,12 +1,16 @@
 :root {
+  --welcome-blue-core: #b8d4fc;
+  --welcome-blue-mid: #d8e6fd;
+  --welcome-blue-soft: #e8f0fe;
   --sky-white: #ffffff;
-  --sky-light: #e0f4ff;
-  --sky-blue: #87ceeb;
-  --sky-deep: #5eb8e6;
-  --tidal-accent: #38bdf8;
+  --sky-light: var(--welcome-blue-soft);
+  --sky-blue: var(--welcome-blue-mid);
+  --sky-deep: var(--welcome-blue-core);
+  --tidal-accent: #85b5f7;
+  --tidal-accent-deep: #6b9aed;
   --tidal-text: #1e293b;
   --tidal-text-muted: #64748b;
-  --tidal-border: rgba(14, 165, 233, 0.25);
+  --tidal-border: rgba(133, 181, 247, 0.32);
   --font-display: "Archivo Black", sans-serif;
   --font-body: "Archivo Black", sans-serif;
 }
@@ -38,6 +42,7 @@ body {
   background: var(--sky-white);
   line-height: 1.6;
   overflow-x: hidden;
+  transition: background-color 0.7s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
 }
 
 .signin-bar {
@@ -85,13 +90,13 @@ body {
   border: none;
   border-radius: 50px;
   text-decoration: none;
-  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.45);
+  box-shadow: 0 4px 20px rgba(133, 181, 247, 0.4);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .floating-signin-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 24px rgba(56, 189, 248, 0.5);
+  box-shadow: 0 6px 24px rgba(133, 181, 247, 0.5);
 }
 
 .wave-bg {
@@ -99,6 +104,64 @@ body {
   inset: 0;
   z-index: -1;
   background: linear-gradient(180deg, var(--sky-white) 0%, var(--sky-light) 35%, var(--sky-blue) 70%, var(--sky-deep) 100%);
+}
+
+/* App: crossfade between Classic and Dark backgrounds */
+.theme-bg-stack {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.theme-bg-stack > .wave-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+}
+
+.theme-bg-stack.is-instant > .wave-bg {
+  transition: none;
+}
+
+.theme-bg-stack > .wave-bg-classic {
+  opacity: 1;
+}
+
+body.theme-dark .theme-bg-stack > .wave-bg-classic {
+  opacity: 0;
+}
+
+.theme-bg-stack > .wave-bg-dark {
+  opacity: 0;
+  background:
+    radial-gradient(1000px 480px at 82% 88%, rgba(107, 154, 237, 0.22), transparent 64%),
+    radial-gradient(760px 420px at 16% 8%, rgba(34, 211, 238, 0.12), transparent 70%),
+    linear-gradient(180deg, #05070a 0%, #060a0f 38%, #08111d 72%, #04070e 100%);
+}
+
+body.theme-dark .theme-bg-stack > .wave-bg-dark {
+  opacity: 1;
+}
+
+.theme-bg-stack > .wave-bg-dark::before,
+.theme-bg-stack > .wave-bg-dark::after {
+  opacity: 0.35;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
+
+  .theme-bg-stack > .wave-bg {
+    transition: none;
+  }
 }
 
 .wave-bg::after {
@@ -204,7 +267,7 @@ body {
 .feature-card:hover {
   transform: translateY(-2px);
   border-color: var(--tidal-accent);
-  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.15);
+  box-shadow: 0 10px 30px rgba(107, 154, 237, 0.15);
 }
 
 .feature-title {
@@ -263,66 +326,13 @@ body {
   border-color: var(--tidal-accent);
 }
 
-/* App page (signed-in) */
+/* App page */
 .app-shell {
   display: flex;
+  flex-direction: column;
+  width: 100%;
   height: 100vh;
   overflow: hidden;
-}
-
-.app-sidebar {
-  width: 200px;
-  height: 100vh;
-  padding: 1.25rem 1rem;
-  background: rgba(255, 255, 255, 0.9);
-  border-right: 1px solid var(--tidal-border);
-  backdrop-filter: blur(12px);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.app-sidebar-title {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--tidal-accent);
-}
-
-.app-sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.app-sidebar-item {
-  display: block;
-  text-align: left;
-  padding: 0.5rem 0.7rem;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--tidal-text-muted);
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.app-sidebar-item:hover {
-  background: rgba(224, 244, 255, 0.8);
-  border-color: var(--tidal-border);
-  color: var(--tidal-text);
-}
-
-.app-sidebar-item.is-active {
-  background: var(--tidal-accent);
-  border-color: var(--tidal-accent);
-  color: #fff;
 }
 
 .app-content {
@@ -330,15 +340,72 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  overflow-y: auto;
+  width: 100%;
+  overflow: hidden;
+}
+
+.app-top-nav {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem clamp(1rem, 3vw, 1.5rem);
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid var(--tidal-border);
+  backdrop-filter: blur(10px);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-sidebar-nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.app-sidebar-item {
+  display: inline-block;
+  flex-shrink: 0;
+  text-align: center;
+  padding: 0.5rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--tidal-text-muted);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.app-sidebar-item:hover {
+  background: rgba(224, 244, 255, 0.8);
+  border-color: var(--tidal-border);
+  color: var(--tidal-text);
+  transform: translateY(-1px);
+}
+
+.app-sidebar-item.is-active {
+  background: var(--tidal-accent);
+  border-color: var(--tidal-accent);
+  color: #fff;
 }
 .app-header {
   position: sticky;
   top: 0;
   z-index: 15;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
+  gap: 0.75rem;
   padding: 0.9rem 1.5rem;
   background: rgba(255, 255, 255, 0.95);
   border-bottom: 1px solid var(--tidal-border);
@@ -346,17 +413,50 @@ body {
 }
 
 .app-logo {
+  justify-self: start;
   font-family: var(--font-display);
   font-size: 1.15rem;
   letter-spacing: 0.08em;
   color: var(--tidal-accent);
 }
 
+.app-welcome-name {
+  justify-self: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--tidal-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: none;
+  text-align: center;
+  white-space: nowrap;
+  transition: color 0.35s ease;
+}
+
+.app-welcome-name-value {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.35s ease;
+}
+
+.app-welcome-name:hover,
+.app-welcome-name:hover .app-welcome-name-value {
+  color: var(--tidal-accent);
+  text-decoration: none;
+}
+
 .app-nav {
+  justify-self: end;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  width: 100%;
+  flex-wrap: wrap;
 }
 
 .app-tab {
@@ -406,48 +506,36 @@ body {
   text-decoration: none;
 }
 
-.app-name-btn {
-  margin-left: 0.75rem;
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--tidal-text);
-  border-radius: 999px;
-  padding: 0.45rem 0.85rem;
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-}
-
 .app-points {
-  margin-left: auto;
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid var(--tidal-border);
-  background: rgba(255, 255, 255, 0.9);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   color: var(--tidal-accent);
-  font-size: 0.86rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
 .app-shards {
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(236, 72, 153, 0.35);
-  background: rgba(253, 242, 248, 0.9);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   color: #db2777;
-  font-size: 0.86rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
 .app-streak {
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(251, 146, 60, 0.4);
-  background: rgba(255, 247, 237, 0.88);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   color: #c2410c;
-  font-size: 0.86rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
@@ -455,72 +543,171 @@ body {
   text-decoration: underline;
 }
 
-.name-prompt-overlay {
+/* Startup welcome screen (Gemini-style) */
+body.welcome-screen-active:not(.welcome-screen-revealing-app) .app-shell,
+body.welcome-screen-active:not(.welcome-screen-revealing-app) .theme-bg-stack,
+body.welcome-screen-active:not(.welcome-screen-revealing-app) .page-transition {
+  visibility: hidden;
+}
+
+.welcome-screen {
   position: fixed;
   inset: 0;
   z-index: 2147483647;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
-  background: rgba(2, 6, 23, 0.45);
-  opacity: 0;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  background: transparent;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.22s ease, visibility 0.22s ease;
 }
 
-.name-prompt-overlay.is-open {
-  opacity: 1;
+.welcome-screen.is-open {
   visibility: visible;
   pointer-events: auto;
 }
 
-.name-prompt-card {
-  width: min(520px, 92vw);
-  border-radius: 16px;
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 20px 60px rgba(2, 132, 199, 0.18);
-  backdrop-filter: blur(12px) saturate(1.1);
-  padding: 1.05rem 1.05rem 1rem;
+.welcome-screen-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 155% 115% at 50% 38%, var(--welcome-blue-core) 0%, var(--welcome-blue-mid) 32%, var(--welcome-blue-soft) 52%, rgba(255, 255, 255, 0.92) 78%, #ffffff 100%),
+    #ffffff;
+  opacity: 0;
+  transition: opacity 0.65s ease;
+  pointer-events: none;
 }
 
-.name-prompt-title {
-  margin: 0 0 0.2rem;
-  font-family: var(--font-display);
-  color: var(--tidal-accent);
-  font-size: 1.1rem;
+.welcome-screen.is-open .welcome-screen-backdrop {
+  opacity: 1;
 }
 
-.name-prompt-subtitle {
-  margin: 0 0 0.9rem;
-  color: var(--tidal-text-muted);
-  font-size: 0.92rem;
+.welcome-screen.is-bg-fading-out .welcome-screen-backdrop {
+  opacity: 0;
 }
 
-.name-prompt-form {
+.welcome-screen-inner {
+  position: relative;
+  z-index: 1;
+  width: min(720px, 100%);
+  text-align: center;
+}
+
+.welcome-screen-greeting,
+.welcome-screen-input-wrap {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.welcome-screen.is-content-visible .welcome-screen-greeting,
+.welcome-screen.is-content-visible .welcome-screen-input-wrap {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.welcome-screen.is-content-fading-out .welcome-screen-greeting,
+.welcome-screen.is-content-fading-out .welcome-screen-input-wrap {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.welcome-screen-greeting {
+  margin: 0 0 clamp(1.5rem, 4vw, 2rem);
+  font-family: "Google Sans", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(1.65rem, 4.8vw, 2.35rem);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #3c4043;
+  letter-spacing: -0.02em;
+}
+
+.welcome-screen-form {
+  margin: 0;
+}
+
+.welcome-screen-form[hidden] {
+  display: none;
+}
+
+.welcome-screen-input-wrap {
   display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
+  justify-content: center;
 }
 
-.name-prompt-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.55rem;
+.welcome-screen-input {
+  width: min(100%, 560px);
+  margin: 0;
+  padding: 1rem 1.4rem;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(60, 64, 67, 0.08),
+    0 2px 6px rgba(60, 64, 67, 0.06),
+    0 8px 24px rgba(60, 64, 67, 0.1);
+  font-family: "Google Sans", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #3c4043;
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.welcome-screen-input::placeholder {
+  color: #9aa0a6;
+}
+
+.welcome-screen-input:focus {
+  box-shadow:
+    0 1px 3px rgba(60, 64, 67, 0.1),
+    0 4px 12px rgba(60, 64, 67, 0.08),
+    0 10px 28px rgba(26, 115, 232, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-screen-greeting,
+  .welcome-screen-input-wrap {
+    transition: none;
+    transform: none;
+  }
+
+  .welcome-screen.is-content-visible .welcome-screen-greeting,
+  .welcome-screen.is-content-visible .welcome-screen-input-wrap {
+    opacity: 1;
+  }
+
+  .welcome-screen-backdrop {
+    transition: none;
+  }
+
+  .welcome-screen.is-open .welcome-screen-backdrop {
+    opacity: 1;
+  }
 }
 
 .app-main {
+  flex: 1;
   width: 100%;
-  margin: 1.5rem 0 3rem;
-  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  min-height: 0;
+  margin: 0;
+  padding: clamp(1rem, 2vw, 1.4rem) clamp(1.5rem, 4vw, 3rem) 3rem;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 #apps-panel {
   max-width: 900px;
   margin: 0 auto;
+}
+
+#apps-panel .section-title {
+  text-align: center;
+}
+
+#apps-panel .apps-toolbar {
+  justify-content: center;
 }
 
 #schedule-panel {
@@ -581,6 +768,40 @@ body {
   margin-bottom: 1.25rem;
 }
 
+.add-link-btn-icon-only {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+#add-link-btn.add-link-btn-icon-only {
+  font-size: 1.45rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.toolbar-btn-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: block;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  pointer-events: none;
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+
+#edit-apps-btn .toolbar-btn-icon--edit {
+  filter: brightness(0) invert(1);
+  opacity: 1;
+}
+
+#edit-apps-btn.is-active .toolbar-btn-icon--edit {
+  filter: brightness(0) invert(1);
+  opacity: 0.55;
+}
+
 .add-link-btn {
   display: inline-flex;
   align-items: center;
@@ -598,7 +819,7 @@ body {
 
 .add-link-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 14px rgba(133, 181, 247, 0.4);
 }
 
 .add-link-btn-danger {
@@ -618,9 +839,8 @@ body {
 }
 
 #edit-apps-btn.is-active {
-  background: #0ea5e9;
-  border-color: #0284c7;
-  color: #fff;
+  background: var(--tidal-accent);
+  border-color: var(--tidal-accent);
 }
 
 .upcoming-panel {
@@ -773,8 +993,8 @@ body {
 }
 
 .upcoming-item.status-in_progress {
-  background: rgba(56, 189, 248, 0.16);
-  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(133, 181, 247, 0.16);
+  border-color: rgba(133, 181, 247, 0.4);
 }
 
 .upcoming-item.status-done {
@@ -1112,7 +1332,7 @@ body {
 
 .app-link-card:hover {
   border-color: var(--tidal-accent);
-  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 6px 20px rgba(133, 181, 247, 0.15);
   transform: translateY(-2px);
 }
 
@@ -1141,7 +1361,7 @@ body {
   margin-top: 0.35rem;
   padding: 0.1rem 0.35rem;
   border-radius: 999px;
-  background: rgba(14, 165, 233, 0.16);
+  background: rgba(107, 154, 237, 0.16);
   color: var(--tidal-accent);
   font-size: 0.68rem;
   font-weight: 700;
@@ -1187,12 +1407,12 @@ body {
 
 .app-link-folder.is-drop-target {
   border-color: var(--tidal-accent);
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.34), 0 8px 20px rgba(56, 189, 248, 0.2);
+  box-shadow: 0 0 0 2px rgba(133, 181, 247, 0.34), 0 8px 20px rgba(133, 181, 247, 0.2);
 }
 
 .app-link-card.is-swap-target {
-  border-color: rgba(56, 189, 248, 0.75);
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25), 0 8px 16px rgba(56, 189, 248, 0.18);
+  border-color: rgba(133, 181, 247, 0.75);
+  box-shadow: 0 0 0 2px rgba(133, 181, 247, 0.25), 0 8px 16px rgba(133, 181, 247, 0.18);
   transform: scale(1.03);
 }
 
@@ -1365,12 +1585,6 @@ body {
   gap: 0.5rem;
 }
 
-#tidal-store-all-apps-btn.is-active {
-  background: var(--tidal-accent);
-  color: #fff;
-  border-color: var(--tidal-accent);
-}
-
 .tidal-store-search {
   flex: 1;
   max-width: min(520px, 100%);
@@ -1391,6 +1605,37 @@ body {
 .tidal-store-app-btn {
   min-height: 52px;
   justify-content: flex-start;
+}
+
+#tidal-store-panel .section-title,
+#tidal-store-panel .games-panel-title,
+#tidal-store-panel .schedule-column-title {
+  color: var(--tidal-accent);
+}
+
+#tidal-store-panel .tidal-store-app-btn:hover,
+#tidal-store-all-apps-btn.is-active {
+  border-color: var(--tidal-accent);
+  background: rgba(232, 240, 254, 0.95);
+}
+
+#tidal-store-all-apps-btn.is-active {
+  background: linear-gradient(135deg, var(--tidal-accent), var(--tidal-accent-deep));
+  color: #fff;
+}
+
+.app-link-card--tidal-store {
+  border-color: rgba(133, 181, 247, 0.45);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(232, 240, 254, 0.88));
+}
+
+.app-link-card--tidal-store:hover {
+  border-color: var(--tidal-accent);
+  box-shadow: 0 6px 20px rgba(133, 181, 247, 0.2);
+}
+
+.app-link-card--tidal-store .app-link-name {
+  color: var(--tidal-accent-deep);
 }
 
 .store-app-overlay {
@@ -1465,83 +1710,18 @@ body {
   object-fit: contain;
 }
 
-/* Ensure custom theme contrast consistency on newly added UI */
-body.theme-space .tidal-store-app-btn,
-body.theme-volcano .tidal-store-app-btn,
-body.theme-forest .tidal-store-app-btn,
-body.theme-sunset .tidal-store-app-btn,
-body.theme-lavender .tidal-store-app-btn,
-body.theme-neon .tidal-store-app-btn,
-body.theme-sand .tidal-store-app-btn,
-body.theme-midnight .tidal-store-app-btn,
-body.theme-steph .tidal-store-app-btn,
-body.theme-dark .tidal-store-app-btn {
-  background: var(--theme-surface-alt, rgba(12, 14, 20, 0.95));
-  border-color: var(--theme-border, rgba(255, 255, 255, 0.2));
-  color: var(--theme-text, #fff);
-}
-
-body.theme-space .tidal-store-search,
-body.theme-volcano .tidal-store-search,
-body.theme-forest .tidal-store-search,
-body.theme-sunset .tidal-store-search,
-body.theme-lavender .tidal-store-search,
-body.theme-neon .tidal-store-search,
-body.theme-sand .tidal-store-search,
-body.theme-midnight .tidal-store-search,
-body.theme-steph .tidal-store-search,
+/* Store/search contrast on dark theme */
+body.theme-dark .tidal-store-app-btn,
 body.theme-dark .tidal-store-search {
   background: var(--theme-surface-alt, rgba(12, 14, 20, 0.95));
   border-color: var(--theme-border, rgba(255, 255, 255, 0.2));
   color: var(--theme-text, #fff);
 }
 
-body.theme-space .tidal-store-search::placeholder,
-body.theme-volcano .tidal-store-search::placeholder,
-body.theme-forest .tidal-store-search::placeholder,
-body.theme-sunset .tidal-store-search::placeholder,
-body.theme-lavender .tidal-store-search::placeholder,
-body.theme-neon .tidal-store-search::placeholder,
-body.theme-sand .tidal-store-search::placeholder,
-body.theme-midnight .tidal-store-search::placeholder,
-body.theme-steph .tidal-store-search::placeholder,
 body.theme-dark .tidal-store-search::placeholder {
   color: var(--theme-muted, rgba(245, 248, 255, 0.82));
 }
 
-body.theme-space :is(.folder-view-app-name, .store-app-description, .app-edit-subtitle, .daily-motivation-text, .games-panel-text, .upcoming-item-time, .upcoming-subtitle, .schedule-day-field, .schedule-day-activity-time, .all-schedules-date-header, .unlockable-style-desc, .unlockable-style-status),
-body.theme-volcano :is(.folder-view-app-name, .store-app-description, .app-edit-subtitle, .daily-motivation-text, .games-panel-text, .upcoming-item-time, .upcoming-subtitle, .schedule-day-field, .schedule-day-activity-time, .all-schedules-date-header, .unlockable-style-desc, .unlockable-style-status),
-body.theme-forest :is(.folder-view-app-name, .store-app-description, .app-edit-subtitle, .daily-motivation-text, .games-panel-text, .upcoming-item-time, .upcoming-subtitle, .schedule-day-field, .schedule-day-activity-time, .all-schedules-date-header, .unlockable-style-desc, .unlockable-style-status),
-body.theme-sunset :is(.folder-view-app-name, .store-app-description, .app-edit-subtitle, .daily-motivation-text, .games-panel-text, .upcoming-item-time, .upcoming-subtitle, .schedule-day-field, .schedule-day-activity-time, .all-schedules-date-header, .unlockable-style-desc, .unlockable-style-status),
-body.theme-lavender :is(.folder-view-app-name, .store-app-description, .app-edit-subtitle, .daily-motivation-text, .games-panel-text, .upcoming-item-time, .upcoming-subtitle, .schedule-day-field, .schedule-day-activity-time, .all-schedules-date-header, .unlockable-style-desc, .unlockable-style-status),
-body.theme-neon :is(.folder-view-app-name, .store-app-description, .app-edit-subtitle, .daily-motivation-text, .games-panel-text, .upcoming-item-time, .upcoming-subtitle, .schedule-day-field, .schedule-day-activity-time, .all-schedules-date-header, .unlockable-style-desc, .unlockable-style-status),
-body.theme-sand :is(.folder-view-app-name, .store-app-description, .app-edit-subtitle, .daily-motivation-text, .games-panel-text, .upcoming-item-time, .upcoming-subtitle, .schedule-day-field, .schedule-day-activity-time, .all-schedules-date-header, .unlockable-style-desc, .unlockable-style-status),
-body.theme-midnight :is(.folder-view-app-name, .store-app-description, .app-edit-subtitle, .daily-motivation-text, .games-panel-text, .upcoming-item-time, .upcoming-subtitle, .schedule-day-field, .schedule-day-activity-time, .all-schedules-date-header, .unlockable-style-desc, .unlockable-style-status),
-body.theme-steph :is(.folder-view-app-name, .store-app-description, .app-edit-subtitle, .daily-motivation-text, .games-panel-text, .upcoming-item-time, .upcoming-subtitle, .schedule-day-field, .schedule-day-activity-time, .all-schedules-date-header, .unlockable-style-desc, .unlockable-style-status) {
-  color: var(--theme-muted, rgba(245, 248, 255, 0.88));
-}
-
-body.theme-space :is(.app-link-name, .upcoming-item-name, .schedule-day-activity-name, .store-app-title, .app-edit-title, .folder-view-title, .unlockable-style-name),
-body.theme-volcano :is(.app-link-name, .upcoming-item-name, .schedule-day-activity-name, .store-app-title, .app-edit-title, .folder-view-title, .unlockable-style-name),
-body.theme-forest :is(.app-link-name, .upcoming-item-name, .schedule-day-activity-name, .store-app-title, .app-edit-title, .folder-view-title, .unlockable-style-name),
-body.theme-sunset :is(.app-link-name, .upcoming-item-name, .schedule-day-activity-name, .store-app-title, .app-edit-title, .folder-view-title, .unlockable-style-name),
-body.theme-lavender :is(.app-link-name, .upcoming-item-name, .schedule-day-activity-name, .store-app-title, .app-edit-title, .folder-view-title, .unlockable-style-name),
-body.theme-neon :is(.app-link-name, .upcoming-item-name, .schedule-day-activity-name, .store-app-title, .app-edit-title, .folder-view-title, .unlockable-style-name),
-body.theme-sand :is(.app-link-name, .upcoming-item-name, .schedule-day-activity-name, .store-app-title, .app-edit-title, .folder-view-title, .unlockable-style-name),
-body.theme-midnight :is(.app-link-name, .upcoming-item-name, .schedule-day-activity-name, .store-app-title, .app-edit-title, .folder-view-title, .unlockable-style-name),
-body.theme-steph :is(.app-link-name, .upcoming-item-name, .schedule-day-activity-name, .store-app-title, .app-edit-title, .folder-view-title, .unlockable-style-name) {
-  color: var(--theme-text, #fff);
-}
-
-body.theme-space :is(.folder-view-remove-btn, .store-app-close-btn),
-body.theme-volcano :is(.folder-view-remove-btn, .store-app-close-btn),
-body.theme-forest :is(.folder-view-remove-btn, .store-app-close-btn),
-body.theme-sunset :is(.folder-view-remove-btn, .store-app-close-btn),
-body.theme-lavender :is(.folder-view-remove-btn, .store-app-close-btn),
-body.theme-neon :is(.folder-view-remove-btn, .store-app-close-btn),
-body.theme-sand :is(.folder-view-remove-btn, .store-app-close-btn),
-body.theme-midnight :is(.folder-view-remove-btn, .store-app-close-btn),
-body.theme-steph :is(.folder-view-remove-btn, .store-app-close-btn),
 body.theme-dark :is(.folder-view-remove-btn, .store-app-close-btn) {
   background: var(--theme-surface-alt, rgba(12, 14, 20, 0.95));
   color: var(--theme-text, #fff);
@@ -2096,16 +2276,16 @@ body.theme-dark :is(.folder-view-remove-btn, .store-app-close-btn) {
 }
 
 .cal-day:hover {
-  background: rgba(56, 189, 248, 0.25);
+  background: rgba(133, 181, 247, 0.25);
 }
 
 .cal-selected {
-  background: rgba(56, 189, 248, 0.35);
+  background: rgba(133, 181, 247, 0.35);
   color: var(--tidal-text);
 }
 
 .cal-selected:hover {
-  background: rgba(56, 189, 248, 0.45);
+  background: rgba(133, 181, 247, 0.45);
 }
 
 .cal-today {
@@ -2322,7 +2502,7 @@ body.focus-mode-active .streak-login-overlay {
   position: relative;
   width: min(560px, 92vw);
   min-height: 540px;
-  border: 1px solid rgba(56, 189, 248, 0.28);
+  border: 1px solid rgba(133, 181, 247, 0.28);
   background: rgba(255, 255, 255, 0.95);
   color: var(--tidal-text);
   box-shadow: 0 24px 64px rgba(2, 132, 199, 0.2);
@@ -2438,90 +2618,73 @@ body.focus-mode-active .streak-login-overlay {
   --tidal-surface: rgba(248, 253, 255, 0.72);
   --tidal-surface-strong: rgba(255, 255, 255, 0.9);
   --tidal-shadow-soft: 0 14px 30px rgba(8, 47, 73, 0.12);
-  --tidal-shadow-pop: 0 20px 44px rgba(14, 116, 144, 0.2);
-  --tidal-glow: 0 0 0 1px rgba(125, 211, 252, 0.25), 0 0 22px rgba(56, 189, 248, 0.2);
+  --tidal-shadow-pop: 0 20px 44px rgba(107, 154, 237, 0.18);
+  --tidal-glow: 0 0 0 1px rgba(184, 212, 252, 0.35), 0 0 22px rgba(133, 181, 247, 0.22);
 }
 
 body {
   letter-spacing: 0.005em;
 }
 
-.wave-bg {
+.theme-bg-stack > .wave-bg-classic,
+.wave-bg:not(.wave-bg-dark) {
   background:
-    radial-gradient(900px 420px at 15% -6%, rgba(56, 189, 248, 0.28), transparent 65%),
-    radial-gradient(1200px 600px at 86% 92%, rgba(34, 211, 238, 0.36), transparent 62%),
-    radial-gradient(760px 520px at 78% 22%, rgba(14, 165, 233, 0.22), transparent 65%),
-    linear-gradient(180deg, #f7fdff 0%, #ddf3ff 36%, #9fd8f4 68%, #6cbbe3 100%);
+    radial-gradient(ellipse 155% 115% at 50% 38%, var(--welcome-blue-core) 0%, var(--welcome-blue-mid) 32%, var(--welcome-blue-soft) 52%, rgba(255, 255, 255, 0.92) 78%, #ffffff 100%),
+    #ffffff;
 }
 
-.wave-bg::before {
+.theme-bg-stack > .wave-bg-classic::before,
+.wave-bg:not(.wave-bg-dark)::before {
   content: "";
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(360px 210px at 22% 18%, rgba(186, 230, 253, 0.35), transparent 70%),
-    radial-gradient(280px 190px at 76% 28%, rgba(125, 211, 252, 0.3), transparent 72%);
-  filter: blur(8px);
+    radial-gradient(480px 280px at 50% 36%, rgba(184, 212, 252, 0.28), transparent 72%);
+  filter: blur(10px);
   pointer-events: none;
 }
 
-.wave-bg::after {
+.theme-bg-stack > .wave-bg-classic::after,
+.wave-bg:not(.wave-bg-dark)::after {
   opacity: 0.62;
   filter: saturate(1.15) blur(1px);
 }
 
-.app-sidebar {
-  background: linear-gradient(180deg, rgba(252, 254, 255, 0.92), rgba(230, 247, 255, 0.82));
-  border-right: 1px solid rgba(56, 189, 248, 0.25);
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.76), 6px 0 22px rgba(14, 116, 144, 0.08);
-}
-
-.app-sidebar-title {
-  font-size: 1rem;
-  letter-spacing: 0.18em;
+.app-top-nav {
+  background: linear-gradient(180deg, rgba(252, 254, 255, 0.95), rgba(232, 240, 254, 0.9));
+  border-bottom: 1px solid var(--tidal-border);
+  box-shadow: 0 8px 22px rgba(107, 154, 237, 0.06);
 }
 
 .app-sidebar-item {
-  border-radius: 12px;
-  padding: 0.6rem 0.78rem;
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
   font-size: 0.92rem;
   font-weight: 700;
   box-shadow: inset 0 0 0 1px transparent;
 }
 
 .app-sidebar-item:hover {
-  background: rgba(224, 244, 255, 0.97);
-  border-color: rgba(56, 189, 248, 0.42);
-  box-shadow: 0 0 0 1px rgba(186, 230, 253, 0.5), 0 8px 20px rgba(14, 116, 144, 0.12);
-  transform: translateX(2px);
+  background: rgba(232, 240, 254, 0.97);
+  border-color: rgba(133, 181, 247, 0.42);
+  box-shadow: 0 0 0 1px rgba(216, 230, 253, 0.55), 0 6px 16px rgba(107, 154, 237, 0.12);
+  transform: translateY(-1px);
 }
 
 .app-sidebar-item.is-active {
-  background: linear-gradient(135deg, #38bdf8, #0284c7);
-  box-shadow: 0 10px 24px rgba(14, 165, 233, 0.35), 0 0 18px rgba(14, 165, 233, 0.28);
+  background: linear-gradient(135deg, var(--tidal-accent), var(--tidal-accent-deep));
+  box-shadow: 0 10px 24px rgba(107, 154, 237, 0.32), 0 0 18px rgba(133, 181, 247, 0.26);
 }
 
 .app-header {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(245, 252, 255, 0.82));
-  border-bottom: 1px solid rgba(56, 189, 248, 0.22);
-  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.78), 0 12px 26px rgba(2, 132, 199, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(232, 240, 254, 0.82));
+  border-bottom: 1px solid var(--tidal-border);
+  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.78), 0 12px 26px rgba(107, 154, 237, 0.08);
 }
 
 .app-logo {
   font-size: 1.06rem;
   letter-spacing: 0.13em;
-}
-
-.app-points,
-.app-shards,
-.app-streak {
-  border-radius: 999px;
-  box-shadow: var(--tidal-shadow-soft);
-  border-color: rgba(56, 189, 248, 0.28);
-}
-
-.app-main {
-  padding-top: clamp(1rem, 2vw, 1.4rem);
 }
 
 .section-title {
@@ -2539,7 +2702,7 @@ body {
 .whiteboard-embed-wrap,
 .schedule-calendar {
   background: linear-gradient(180deg, var(--tidal-surface), rgba(255, 255, 255, 0.66));
-  border: 1px solid rgba(56, 189, 248, 0.26);
+  border: 1px solid rgba(133, 181, 247, 0.26);
   backdrop-filter: blur(14px) saturate(1.1);
   box-shadow: var(--tidal-shadow-soft);
 }
@@ -2547,7 +2710,7 @@ body {
 .add-link-form,
 .app-link-card {
   background: var(--tidal-surface-strong);
-  border-color: rgba(14, 165, 233, 0.22);
+  border-color: rgba(107, 154, 237, 0.22);
   box-shadow: var(--tidal-shadow-soft);
 }
 
@@ -2573,7 +2736,7 @@ body {
 
 .add-link-btn {
   border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(14, 165, 233, 0.28), 0 0 14px rgba(56, 189, 248, 0.22);
+  box-shadow: 0 10px 20px rgba(107, 154, 237, 0.28), 0 0 14px rgba(133, 181, 247, 0.22);
 }
 
 .upcoming-item,
@@ -2597,7 +2760,7 @@ body {
 
 .plinko-canvas {
   border-radius: 14px;
-  box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.26), 0 0 22px rgba(56, 189, 248, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(107, 154, 237, 0.26), 0 0 22px rgba(133, 181, 247, 0.16);
 }
 
 .app-panel {
@@ -2645,7 +2808,7 @@ body {
 
 .customisation-card {
   background: var(--tidal-surface-strong);
-  border: 1px solid rgba(56, 189, 248, 0.26);
+  border: 1px solid rgba(133, 181, 247, 0.26);
   border-radius: 14px;
   padding: 1rem 1.1rem;
   box-shadow: var(--tidal-shadow-soft);
@@ -2665,64 +2828,6 @@ body {
   gap: 0.55rem;
 }
 
-.unlockable-styles-panel {
-  margin-top: 1rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--tidal-border);
-}
-
-.unlockable-styles-title {
-  margin: 0 0 0.5rem;
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-}
-
-.unlockable-style-card {
-  border: 1px solid var(--tidal-border);
-  border-radius: 12px;
-  padding: 0.65rem 0.75rem;
-  background: rgba(255, 255, 255, 0.82);
-  display: flex;
-  justify-content: space-between;
-  gap: 0.65rem;
-  align-items: center;
-}
-
-.unlockable-style-meta {
-  min-width: 0;
-}
-
-.unlockable-style-name {
-  margin: 0;
-  font-weight: 700;
-  color: var(--tidal-text);
-}
-
-.unlockable-style-desc {
-  margin: 0.2rem 0 0;
-  font-size: 0.8rem;
-  color: var(--tidal-text-muted);
-}
-
-.unlockable-style-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  align-items: flex-end;
-}
-
-.unlockable-style-action {
-  min-width: 11rem;
-  text-align: center;
-}
-
-.unlockable-style-status {
-  font-size: 0.75rem;
-  color: var(--tidal-text-muted);
-  font-weight: 600;
-}
-
 .custom-style-btn {
   border: 1px solid var(--tidal-border);
   background: rgba(255, 255, 255, 0.9);
@@ -2736,8 +2841,8 @@ body {
 }
 
 .custom-style-btn.is-active {
-  background: linear-gradient(135deg, #38bdf8, #0284c7);
-  border-color: #0284c7;
+  background: linear-gradient(135deg, var(--tidal-accent), var(--tidal-accent-deep));
+  border-color: var(--tidal-accent-deep);
   color: #fff;
 }
 
@@ -2747,19 +2852,7 @@ body.theme-dark {
   background: #000;
 }
 
-body.theme-dark .wave-bg {
-  background:
-    radial-gradient(1000px 480px at 82% 88%, rgba(14, 165, 233, 0.22), transparent 64%),
-    radial-gradient(760px 420px at 16% 8%, rgba(34, 211, 238, 0.12), transparent 70%),
-    linear-gradient(180deg, #05070a 0%, #060a0f 38%, #08111d 72%, #04070e 100%);
-}
-
-body.theme-dark .wave-bg::before,
-body.theme-dark .wave-bg::after {
-  opacity: 0.35;
-}
-
-body.theme-dark .app-sidebar,
+body.theme-dark .app-top-nav,
 body.theme-dark .app-header,
 body.theme-dark .app-links-grid .app-link-card,
 body.theme-dark .upcoming-panel,
@@ -2792,7 +2885,6 @@ body.theme-dark .group-modal-title {
   color: #fff;
 }
 
-body.theme-dark .app-sidebar-title,
 body.theme-dark .app-user-email,
 body.theme-dark .upcoming-subtitle,
 body.theme-dark .upcoming-item-time,
@@ -2855,10 +2947,35 @@ body.theme-dark .upcoming-status-btn.is-active {
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
 }
 
-body.theme-dark .app-points,
+body.theme-dark .app-welcome-name {
+  background: transparent;
+  border: none;
+  color: #fff;
+  transition: color 0.35s ease;
+}
+
+body.theme-dark .app-welcome-name-value {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.35s ease;
+}
+
+body.theme-dark .app-welcome-name:hover,
+body.theme-dark .app-welcome-name:hover .app-welcome-name-value {
+  color: var(--welcome-blue-soft);
+  text-decoration: none;
+}
+
+body.theme-dark .app-points {
+  color: var(--welcome-blue-soft);
+}
+
+body.theme-dark .app-shards {
+  color: #f9a8d4;
+}
+
 body.theme-dark .app-streak {
-  background: rgba(9, 11, 16, 0.94);
-  border-color: rgba(255, 255, 255, 0.22);
+  color: #fdba74;
 }
 
 body.theme-dark .cal-day:hover,
@@ -2941,568 +3058,16 @@ body.theme-dark .store-app-overlay {
   background: rgba(0, 0, 0, 0.62);
 }
 
-body.theme-dark .unlockable-style-card {
-  background: rgba(12, 15, 22, 0.95);
-  border-color: rgba(255, 255, 255, 0.14);
-}
-
-body.theme-dark .unlockable-style-name,
-body.theme-dark .unlockable-style-desc,
-body.theme-dark .unlockable-style-status {
-  color: rgba(245, 248, 255, 0.88);
-}
-
 body.theme-dark .schedule-complete-overlay,
 body.theme-dark .streak-login-overlay {
   background: rgba(0, 0, 0, 0.55);
 }
 
-/* ===== Additional Theme Styles ===== */
-body.theme-space {
-  --theme-text: #e2e8f0;
-  --theme-muted: #94a3b8;
-  --theme-surface: rgba(8, 16, 38, 0.9);
-  --theme-surface-alt: rgba(15, 23, 52, 0.92);
-  --theme-border: rgba(96, 165, 250, 0.35);
-  --theme-accent: #60a5fa;
-}
-
-body.theme-volcano {
-  --theme-text: #fff4e6;
-  --theme-muted: #fed7aa;
-  --theme-surface: rgba(58, 18, 10, 0.9);
-  --theme-surface-alt: rgba(76, 22, 11, 0.92);
-  --theme-border: rgba(251, 146, 60, 0.35);
-  --theme-accent: #f97316;
-}
-
-body.theme-forest {
-  --theme-text: #e7f6eb;
-  --theme-muted: #bbf7d0;
-  --theme-surface: rgba(14, 38, 24, 0.9);
-  --theme-surface-alt: rgba(16, 52, 31, 0.92);
-  --theme-border: rgba(74, 222, 128, 0.35);
-  --theme-accent: #22c55e;
-}
-
-body.theme-sunset {
-  --theme-text: #fff5f5;
-  --theme-muted: #fbcfe8;
-  --theme-surface: rgba(83, 28, 73, 0.88);
-  --theme-surface-alt: rgba(121, 37, 108, 0.9);
-  --theme-border: rgba(244, 114, 182, 0.35);
-  --theme-accent: #f472b6;
-}
-
-body.theme-lavender {
-  --theme-text: #f4f1ff;
-  --theme-muted: #ddd6fe;
-  --theme-surface: rgba(62, 44, 110, 0.88);
-  --theme-surface-alt: rgba(82, 58, 147, 0.9);
-  --theme-border: rgba(167, 139, 250, 0.4);
-  --theme-accent: #a78bfa;
-}
-
-body.theme-neon {
-  --theme-text: #eafff5;
-  --theme-muted: #99f6e4;
-  --theme-surface: rgba(5, 29, 33, 0.9);
-  --theme-surface-alt: rgba(7, 44, 51, 0.92);
-  --theme-border: rgba(45, 212, 191, 0.42);
-  --theme-accent: #2dd4bf;
-}
-
-body.theme-sand {
-  --theme-text: #3f2f1f;
-  --theme-muted: #7c5e3c;
-  --theme-surface: rgba(250, 240, 219, 0.9);
-  --theme-surface-alt: rgba(245, 228, 195, 0.92);
-  --theme-border: rgba(180, 132, 74, 0.35);
-  --theme-accent: #b45309;
-}
-
-body.theme-midnight {
-  --theme-text: #dbeafe;
-  --theme-muted: #93c5fd;
-  --theme-surface: rgba(7, 20, 48, 0.9);
-  --theme-surface-alt: rgba(15, 29, 70, 0.92);
-  --theme-border: rgba(59, 130, 246, 0.38);
-  --theme-accent: #3b82f6;
-}
-
-body.theme-space .wave-bg {
-  background: radial-gradient(circle at 20% 20%, rgba(96, 165, 250, 0.22), transparent 28%),
-              radial-gradient(circle at 80% 70%, rgba(129, 140, 248, 0.24), transparent 30%),
-              linear-gradient(180deg, #020617 0%, #0b1026 45%, #1e1b4b 100%);
-}
-
-body.theme-volcano .wave-bg {
-  background: radial-gradient(circle at 20% 90%, rgba(220, 38, 38, 0.35), transparent 32%),
-              radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.28), transparent 32%),
-              linear-gradient(180deg, #200707 0%, #4a1a12 45%, #7c2d12 100%);
-}
-
-body.theme-forest .wave-bg {
-  background: radial-gradient(circle at 12% 20%, rgba(34, 197, 94, 0.22), transparent 35%),
-              radial-gradient(circle at 88% 80%, rgba(74, 222, 128, 0.24), transparent 35%),
-              linear-gradient(180deg, #052e16 0%, #14532d 50%, #166534 100%);
-}
-
-body.theme-sunset .wave-bg {
-  background: radial-gradient(circle at 28% 12%, rgba(251, 113, 133, 0.26), transparent 32%),
-              radial-gradient(circle at 78% 74%, rgba(244, 114, 182, 0.24), transparent 34%),
-              linear-gradient(180deg, #581c87 0%, #9d174d 45%, #be123c 100%);
-}
-
-body.theme-lavender .wave-bg {
-  background: radial-gradient(circle at 25% 10%, rgba(192, 132, 252, 0.24), transparent 30%),
-              radial-gradient(circle at 82% 72%, rgba(129, 140, 248, 0.24), transparent 34%),
-              linear-gradient(180deg, #2e1065 0%, #4c1d95 48%, #5b21b6 100%);
-}
-
-body.theme-neon .wave-bg {
-  background:
-    repeating-linear-gradient(90deg, rgba(45, 212, 191, 0.06) 0 1px, transparent 1px 32px),
-    repeating-linear-gradient(0deg, rgba(34, 211, 238, 0.05) 0 1px, transparent 1px 32px),
-    linear-gradient(180deg, #022c22 0%, #083344 52%, #042f2e 100%);
-}
-
-body.theme-sand .wave-bg {
-  background: radial-gradient(circle at 24% 18%, rgba(251, 191, 36, 0.2), transparent 30%),
-              radial-gradient(circle at 78% 78%, rgba(217, 119, 6, 0.16), transparent 35%),
-              linear-gradient(180deg, #fffbeb 0%, #fef3c7 44%, #fcd34d 100%);
-}
-
-body.theme-midnight .wave-bg {
-  background: radial-gradient(circle at 16% 10%, rgba(56, 189, 248, 0.2), transparent 32%),
-              radial-gradient(circle at 82% 82%, rgba(59, 130, 246, 0.24), transparent 35%),
-              linear-gradient(180deg, #020617 0%, #0b173f 50%, #1d4ed8 100%);
-}
-
-body.theme-space,
-body.theme-volcano,
-body.theme-forest,
-body.theme-sunset,
-body.theme-lavender,
-body.theme-neon,
-body.theme-midnight {
-  color: var(--theme-text);
-}
-
-body.theme-sand {
-  color: var(--theme-text);
-}
-
-body.theme-space .app-sidebar,
-body.theme-space .app-header,
-body.theme-space .app-links-grid .app-link-card,
-body.theme-space .upcoming-panel,
-body.theme-space .daily-motivation-panel,
-body.theme-space .games-panel-card,
-body.theme-space .plinko-panel-card,
-body.theme-space .all-schedules-panel-card,
-body.theme-space .schedule-calendar,
-body.theme-space .schedule-day-panel,
-body.theme-space .schedule-day-column-card,
-body.theme-space .whiteboard-embed-wrap,
-body.theme-space .add-link-form,
-body.theme-space .customisation-card,
-body.theme-space .schedule-complete-card,
-body.theme-space .streak-login-card,
-body.theme-volcano .app-sidebar,
-body.theme-volcano .app-header,
-body.theme-volcano .app-links-grid .app-link-card,
-body.theme-volcano .upcoming-panel,
-body.theme-volcano .daily-motivation-panel,
-body.theme-volcano .games-panel-card,
-body.theme-volcano .plinko-panel-card,
-body.theme-volcano .all-schedules-panel-card,
-body.theme-volcano .schedule-calendar,
-body.theme-volcano .schedule-day-panel,
-body.theme-volcano .schedule-day-column-card,
-body.theme-volcano .whiteboard-embed-wrap,
-body.theme-volcano .add-link-form,
-body.theme-volcano .customisation-card,
-body.theme-volcano .schedule-complete-card,
-body.theme-volcano .streak-login-card,
-body.theme-forest .app-sidebar,
-body.theme-forest .app-header,
-body.theme-forest .app-links-grid .app-link-card,
-body.theme-forest .upcoming-panel,
-body.theme-forest .daily-motivation-panel,
-body.theme-forest .games-panel-card,
-body.theme-forest .plinko-panel-card,
-body.theme-forest .all-schedules-panel-card,
-body.theme-forest .schedule-calendar,
-body.theme-forest .schedule-day-panel,
-body.theme-forest .schedule-day-column-card,
-body.theme-forest .whiteboard-embed-wrap,
-body.theme-forest .add-link-form,
-body.theme-forest .customisation-card,
-body.theme-forest .schedule-complete-card,
-body.theme-forest .streak-login-card,
-body.theme-sunset .app-sidebar,
-body.theme-sunset .app-header,
-body.theme-sunset .app-links-grid .app-link-card,
-body.theme-sunset .upcoming-panel,
-body.theme-sunset .daily-motivation-panel,
-body.theme-sunset .games-panel-card,
-body.theme-sunset .plinko-panel-card,
-body.theme-sunset .all-schedules-panel-card,
-body.theme-sunset .schedule-calendar,
-body.theme-sunset .schedule-day-panel,
-body.theme-sunset .schedule-day-column-card,
-body.theme-sunset .whiteboard-embed-wrap,
-body.theme-sunset .add-link-form,
-body.theme-sunset .customisation-card,
-body.theme-sunset .schedule-complete-card,
-body.theme-sunset .streak-login-card,
-body.theme-lavender .app-sidebar,
-body.theme-lavender .app-header,
-body.theme-lavender .app-links-grid .app-link-card,
-body.theme-lavender .upcoming-panel,
-body.theme-lavender .daily-motivation-panel,
-body.theme-lavender .games-panel-card,
-body.theme-lavender .plinko-panel-card,
-body.theme-lavender .all-schedules-panel-card,
-body.theme-lavender .schedule-calendar,
-body.theme-lavender .schedule-day-panel,
-body.theme-lavender .schedule-day-column-card,
-body.theme-lavender .whiteboard-embed-wrap,
-body.theme-lavender .add-link-form,
-body.theme-lavender .customisation-card,
-body.theme-lavender .schedule-complete-card,
-body.theme-lavender .streak-login-card,
-body.theme-neon .app-sidebar,
-body.theme-neon .app-header,
-body.theme-neon .app-links-grid .app-link-card,
-body.theme-neon .upcoming-panel,
-body.theme-neon .daily-motivation-panel,
-body.theme-neon .games-panel-card,
-body.theme-neon .plinko-panel-card,
-body.theme-neon .all-schedules-panel-card,
-body.theme-neon .schedule-calendar,
-body.theme-neon .schedule-day-panel,
-body.theme-neon .schedule-day-column-card,
-body.theme-neon .whiteboard-embed-wrap,
-body.theme-neon .add-link-form,
-body.theme-neon .customisation-card,
-body.theme-neon .schedule-complete-card,
-body.theme-neon .streak-login-card,
-body.theme-sand .app-sidebar,
-body.theme-sand .app-header,
-body.theme-sand .app-links-grid .app-link-card,
-body.theme-sand .upcoming-panel,
-body.theme-sand .daily-motivation-panel,
-body.theme-sand .games-panel-card,
-body.theme-sand .plinko-panel-card,
-body.theme-sand .all-schedules-panel-card,
-body.theme-sand .schedule-calendar,
-body.theme-sand .schedule-day-panel,
-body.theme-sand .schedule-day-column-card,
-body.theme-sand .whiteboard-embed-wrap,
-body.theme-sand .add-link-form,
-body.theme-sand .customisation-card,
-body.theme-sand .schedule-complete-card,
-body.theme-sand .streak-login-card,
-body.theme-midnight .app-sidebar,
-body.theme-midnight .app-header,
-body.theme-midnight .app-links-grid .app-link-card,
-body.theme-midnight .upcoming-panel,
-body.theme-midnight .daily-motivation-panel,
-body.theme-midnight .games-panel-card,
-body.theme-midnight .plinko-panel-card,
-body.theme-midnight .all-schedules-panel-card,
-body.theme-midnight .schedule-calendar,
-body.theme-midnight .schedule-day-panel,
-body.theme-midnight .schedule-day-column-card,
-body.theme-midnight .whiteboard-embed-wrap,
-body.theme-midnight .add-link-form,
-body.theme-midnight .customisation-card,
-body.theme-midnight .schedule-complete-card,
-body.theme-midnight .streak-login-card {
-  background: var(--theme-surface);
-  border-color: var(--theme-border);
-  color: var(--theme-text);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-
-body.theme-space .app-logo,
-body.theme-space .section-title,
-body.theme-space .upcoming-title,
-body.theme-space .daily-motivation-title,
-body.theme-space .games-panel-title,
-body.theme-space .customisation-title,
-body.theme-space .schedule-column-title,
-body.theme-space .schedule-day-panel-title,
-body.theme-space .group-modal-title,
-body.theme-volcano .app-logo,
-body.theme-volcano .section-title,
-body.theme-volcano .upcoming-title,
-body.theme-volcano .daily-motivation-title,
-body.theme-volcano .games-panel-title,
-body.theme-volcano .customisation-title,
-body.theme-volcano .schedule-column-title,
-body.theme-volcano .schedule-day-panel-title,
-body.theme-volcano .group-modal-title,
-body.theme-forest .app-logo,
-body.theme-forest .section-title,
-body.theme-forest .upcoming-title,
-body.theme-forest .daily-motivation-title,
-body.theme-forest .games-panel-title,
-body.theme-forest .customisation-title,
-body.theme-forest .schedule-column-title,
-body.theme-forest .schedule-day-panel-title,
-body.theme-forest .group-modal-title,
-body.theme-sunset .app-logo,
-body.theme-sunset .section-title,
-body.theme-sunset .upcoming-title,
-body.theme-sunset .daily-motivation-title,
-body.theme-sunset .games-panel-title,
-body.theme-sunset .customisation-title,
-body.theme-sunset .schedule-column-title,
-body.theme-sunset .schedule-day-panel-title,
-body.theme-sunset .group-modal-title,
-body.theme-lavender .app-logo,
-body.theme-lavender .section-title,
-body.theme-lavender .upcoming-title,
-body.theme-lavender .daily-motivation-title,
-body.theme-lavender .games-panel-title,
-body.theme-lavender .customisation-title,
-body.theme-lavender .schedule-column-title,
-body.theme-lavender .schedule-day-panel-title,
-body.theme-lavender .group-modal-title,
-body.theme-neon .app-logo,
-body.theme-neon .section-title,
-body.theme-neon .upcoming-title,
-body.theme-neon .daily-motivation-title,
-body.theme-neon .games-panel-title,
-body.theme-neon .customisation-title,
-body.theme-neon .schedule-column-title,
-body.theme-neon .schedule-day-panel-title,
-body.theme-neon .group-modal-title,
-body.theme-sand .app-logo,
-body.theme-sand .section-title,
-body.theme-sand .upcoming-title,
-body.theme-sand .daily-motivation-title,
-body.theme-sand .games-panel-title,
-body.theme-sand .customisation-title,
-body.theme-sand .schedule-column-title,
-body.theme-sand .schedule-day-panel-title,
-body.theme-sand .group-modal-title,
-body.theme-midnight .app-logo,
-body.theme-midnight .section-title,
-body.theme-midnight .upcoming-title,
-body.theme-midnight .daily-motivation-title,
-body.theme-midnight .games-panel-title,
-body.theme-midnight .customisation-title,
-body.theme-midnight .schedule-column-title,
-body.theme-midnight .schedule-day-panel-title,
-body.theme-midnight .group-modal-title {
-  color: var(--theme-accent);
-}
-
-body.theme-space .app-sidebar-item,
-body.theme-space .custom-style-btn,
-body.theme-space .plinko-back-btn,
-body.theme-space .upcoming-view-all-btn,
-body.theme-space .upcoming-status-btn,
-body.theme-space .upcoming-delete-btn,
-body.theme-space .add-link-btn-danger,
-body.theme-space .add-link-input,
-body.theme-space .schedule-day-time-input,
-body.theme-space .schedule-day-select,
-body.theme-space .cal-nav-select,
-body.theme-space .cal-nav-btn,
-body.theme-space .schedule-priority-select,
-body.theme-volcano .app-sidebar-item,
-body.theme-volcano .custom-style-btn,
-body.theme-volcano .plinko-back-btn,
-body.theme-volcano .upcoming-view-all-btn,
-body.theme-volcano .upcoming-status-btn,
-body.theme-volcano .upcoming-delete-btn,
-body.theme-volcano .add-link-btn-danger,
-body.theme-volcano .add-link-input,
-body.theme-volcano .schedule-day-time-input,
-body.theme-volcano .schedule-day-select,
-body.theme-volcano .cal-nav-select,
-body.theme-volcano .cal-nav-btn,
-body.theme-volcano .schedule-priority-select,
-body.theme-forest .app-sidebar-item,
-body.theme-forest .custom-style-btn,
-body.theme-forest .plinko-back-btn,
-body.theme-forest .upcoming-view-all-btn,
-body.theme-forest .upcoming-status-btn,
-body.theme-forest .upcoming-delete-btn,
-body.theme-forest .add-link-btn-danger,
-body.theme-forest .add-link-input,
-body.theme-forest .schedule-day-time-input,
-body.theme-forest .schedule-day-select,
-body.theme-forest .cal-nav-select,
-body.theme-forest .cal-nav-btn,
-body.theme-forest .schedule-priority-select,
-body.theme-sunset .app-sidebar-item,
-body.theme-sunset .custom-style-btn,
-body.theme-sunset .plinko-back-btn,
-body.theme-sunset .upcoming-view-all-btn,
-body.theme-sunset .upcoming-status-btn,
-body.theme-sunset .upcoming-delete-btn,
-body.theme-sunset .add-link-btn-danger,
-body.theme-sunset .add-link-input,
-body.theme-sunset .schedule-day-time-input,
-body.theme-sunset .schedule-day-select,
-body.theme-sunset .cal-nav-select,
-body.theme-sunset .cal-nav-btn,
-body.theme-sunset .schedule-priority-select,
-body.theme-lavender .app-sidebar-item,
-body.theme-lavender .custom-style-btn,
-body.theme-lavender .plinko-back-btn,
-body.theme-lavender .upcoming-view-all-btn,
-body.theme-lavender .upcoming-status-btn,
-body.theme-lavender .upcoming-delete-btn,
-body.theme-lavender .add-link-btn-danger,
-body.theme-lavender .add-link-input,
-body.theme-lavender .schedule-day-time-input,
-body.theme-lavender .schedule-day-select,
-body.theme-lavender .cal-nav-select,
-body.theme-lavender .cal-nav-btn,
-body.theme-lavender .schedule-priority-select,
-body.theme-neon .app-sidebar-item,
-body.theme-neon .custom-style-btn,
-body.theme-neon .plinko-back-btn,
-body.theme-neon .upcoming-view-all-btn,
-body.theme-neon .upcoming-status-btn,
-body.theme-neon .upcoming-delete-btn,
-body.theme-neon .add-link-btn-danger,
-body.theme-neon .add-link-input,
-body.theme-neon .schedule-day-time-input,
-body.theme-neon .schedule-day-select,
-body.theme-neon .cal-nav-select,
-body.theme-neon .cal-nav-btn,
-body.theme-neon .schedule-priority-select,
-body.theme-sand .app-sidebar-item,
-body.theme-sand .custom-style-btn,
-body.theme-sand .plinko-back-btn,
-body.theme-sand .upcoming-view-all-btn,
-body.theme-sand .upcoming-status-btn,
-body.theme-sand .upcoming-delete-btn,
-body.theme-sand .add-link-btn-danger,
-body.theme-sand .add-link-input,
-body.theme-sand .schedule-day-time-input,
-body.theme-sand .schedule-day-select,
-body.theme-sand .cal-nav-select,
-body.theme-sand .cal-nav-btn,
-body.theme-sand .schedule-priority-select,
-body.theme-midnight .app-sidebar-item,
-body.theme-midnight .custom-style-btn,
-body.theme-midnight .plinko-back-btn,
-body.theme-midnight .upcoming-view-all-btn,
-body.theme-midnight .upcoming-status-btn,
-body.theme-midnight .upcoming-delete-btn,
-body.theme-midnight .add-link-btn-danger,
-body.theme-midnight .add-link-input,
-body.theme-midnight .schedule-day-time-input,
-body.theme-midnight .schedule-day-select,
-body.theme-midnight .cal-nav-select,
-body.theme-midnight .cal-nav-btn,
-body.theme-midnight .schedule-priority-select {
-  background: var(--theme-surface-alt);
-  color: var(--theme-text);
-  border-color: var(--theme-border);
-}
-
-body.theme-space .app-sidebar-item.is-active,
-body.theme-space .custom-style-btn.is-active,
-body.theme-space .upcoming-status-btn.is-active,
-body.theme-space .add-link-btn,
-body.theme-volcano .app-sidebar-item.is-active,
-body.theme-volcano .custom-style-btn.is-active,
-body.theme-volcano .upcoming-status-btn.is-active,
-body.theme-volcano .add-link-btn,
-body.theme-forest .app-sidebar-item.is-active,
-body.theme-forest .custom-style-btn.is-active,
-body.theme-forest .upcoming-status-btn.is-active,
-body.theme-forest .add-link-btn,
-body.theme-sunset .app-sidebar-item.is-active,
-body.theme-sunset .custom-style-btn.is-active,
-body.theme-sunset .upcoming-status-btn.is-active,
-body.theme-sunset .add-link-btn,
-body.theme-lavender .app-sidebar-item.is-active,
-body.theme-lavender .custom-style-btn.is-active,
-body.theme-lavender .upcoming-status-btn.is-active,
-body.theme-lavender .add-link-btn,
-body.theme-neon .app-sidebar-item.is-active,
-body.theme-neon .custom-style-btn.is-active,
-body.theme-neon .upcoming-status-btn.is-active,
-body.theme-neon .add-link-btn,
-body.theme-sand .app-sidebar-item.is-active,
-body.theme-sand .custom-style-btn.is-active,
-body.theme-sand .upcoming-status-btn.is-active,
-body.theme-sand .add-link-btn,
-body.theme-midnight .app-sidebar-item.is-active,
-body.theme-midnight .custom-style-btn.is-active,
-body.theme-midnight .upcoming-status-btn.is-active,
-body.theme-midnight .add-link-btn {
-  background: var(--theme-accent);
-  color: #fff;
-  border-color: var(--theme-accent);
-}
-
 /* ===== Theme-specific backgrounds, button shapes, and transitions ===== */
-body.theme-ocean .wave-bg::after {
-  background: radial-gradient(520px 240px at 18% 85%, rgba(34, 211, 238, 0.2), transparent 68%),
-              radial-gradient(580px 260px at 82% 18%, rgba(14, 165, 233, 0.2), transparent 72%);
-  opacity: 0.85;
-}
-
-body.theme-space .wave-bg::after {
-  background: radial-gradient(3px 3px at 10% 30%, rgba(255, 255, 255, 0.8), transparent 70%),
-              radial-gradient(2px 2px at 30% 65%, rgba(191, 219, 254, 0.85), transparent 70%),
-              radial-gradient(2px 2px at 70% 35%, rgba(196, 181, 253, 0.85), transparent 70%),
-              radial-gradient(3px 3px at 85% 75%, rgba(224, 231, 255, 0.8), transparent 70%);
+body.theme-ocean .theme-bg-stack > .wave-bg-classic::after {
+  background: radial-gradient(520px 240px at 50% 40%, rgba(184, 212, 252, 0.22), transparent 68%),
+              radial-gradient(580px 260px at 82% 18%, rgba(216, 230, 253, 0.18), transparent 72%);
   opacity: 0.75;
-  filter: none;
-}
-
-body.theme-volcano .wave-bg::after {
-  background: radial-gradient(620px 260px at 18% 88%, rgba(239, 68, 68, 0.35), transparent 70%),
-              radial-gradient(760px 280px at 84% 84%, rgba(249, 115, 22, 0.35), transparent 68%);
-  opacity: 0.9;
-}
-
-body.theme-forest .wave-bg::after {
-  background: radial-gradient(700px 300px at 14% 85%, rgba(34, 197, 94, 0.25), transparent 70%),
-              radial-gradient(600px 260px at 84% 14%, rgba(134, 239, 172, 0.2), transparent 72%);
-  opacity: 0.8;
-}
-
-body.theme-sunset .wave-bg::after {
-  background: linear-gradient(140deg, rgba(251, 113, 133, 0.3), transparent 55%),
-              radial-gradient(640px 260px at 78% 82%, rgba(244, 114, 182, 0.35), transparent 70%);
-  opacity: 0.82;
-}
-
-body.theme-lavender .wave-bg::after {
-  background: radial-gradient(660px 260px at 14% 18%, rgba(196, 181, 253, 0.28), transparent 72%),
-              radial-gradient(620px 240px at 85% 86%, rgba(167, 139, 250, 0.28), transparent 70%);
-  opacity: 0.84;
-}
-
-body.theme-neon .wave-bg::after {
-  background: repeating-linear-gradient(135deg, rgba(45, 212, 191, 0.08) 0 6px, transparent 6px 16px);
-  opacity: 0.72;
-}
-
-body.theme-sand .wave-bg::after {
-  background: radial-gradient(740px 280px at 20% 92%, rgba(217, 119, 6, 0.2), transparent 72%),
-              radial-gradient(600px 250px at 82% 20%, rgba(251, 191, 36, 0.18), transparent 72%);
-  opacity: 0.76;
-}
-
-body.theme-midnight .wave-bg::after {
-  background: radial-gradient(720px 280px at 80% 14%, rgba(59, 130, 246, 0.26), transparent 72%),
-              radial-gradient(700px 260px at 16% 86%, rgba(56, 189, 248, 0.24), transparent 70%);
-  opacity: 0.78;
 }
 
 body :is(
@@ -3528,7 +3093,7 @@ body.theme-ocean {
   --theme-btn-radius: 12px;
   --theme-transition-speed: 0.24s;
   --theme-transition-curve: cubic-bezier(0.23, 0.95, 0.28, 1);
-  --transition-color: #38bdf8;
+  --transition-color: var(--tidal-accent);
 }
 
 body.theme-dark {
@@ -3538,657 +3103,3 @@ body.theme-dark {
   --transition-color: #fff;
 }
 
-body.theme-space {
-  --theme-btn-radius: 14px;
-  --theme-transition-speed: 0.34s;
-  --theme-transition-curve: cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-color: var(--theme-accent, #60a5fa);
-}
-
-body.theme-volcano {
-  --theme-btn-radius: 4px;
-  --theme-transition-speed: 0.18s;
-  --theme-transition-curve: cubic-bezier(0.68, -0.3, 0.32, 1.3);
-  --transition-color: var(--theme-accent, #f97316);
-}
-
-body.theme-forest {
-  --theme-btn-radius: 18px;
-  --theme-transition-speed: 0.28s;
-  --theme-transition-curve: cubic-bezier(0.22, 1, 0.36, 1);
-  --transition-color: var(--theme-accent, #22c55e);
-}
-
-body.theme-sunset {
-  --theme-btn-radius: 22px;
-  --theme-transition-speed: 0.32s;
-  --theme-transition-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --transition-color: var(--theme-accent, #f472b6);
-}
-
-body.theme-lavender {
-  --theme-btn-radius: 16px;
-  --theme-transition-speed: 0.3s;
-  --theme-transition-curve: cubic-bezier(0.25, 0.9, 0.3, 1.2);
-  --transition-color: var(--theme-accent, #a78bfa);
-}
-
-body.theme-neon {
-  --theme-btn-radius: 2px;
-  --theme-transition-speed: 0.16s;
-  --theme-transition-curve: linear;
-  --transition-color: var(--theme-accent, #2dd4bf);
-}
-
-body.theme-sand {
-  --theme-btn-radius: 28px;
-  --theme-transition-speed: 0.3s;
-  --theme-transition-curve: cubic-bezier(0.22, 1, 0.36, 1);
-  --transition-color: var(--theme-accent, #b45309);
-}
-
-body.theme-midnight {
-  --theme-btn-radius: 12px;
-  --theme-transition-speed: 0.22s;
-  --theme-transition-curve: cubic-bezier(0.2, 0.9, 0.2, 1);
-  --transition-color: var(--theme-accent, #3b82f6);
-}
-
-body.theme-steph {
-  --theme-text: #f8f6ed;
-  --theme-muted: #e8cf7a;
-  --theme-surface: rgba(8, 8, 8, 0.86);
-  --theme-surface-alt: rgba(18, 18, 18, 0.9);
-  --theme-border: rgba(234, 179, 8, 0.45);
-  --theme-accent: #facc15;
-  --theme-btn-radius: 10px;
-  --theme-transition-speed: 0.24s;
-  --theme-transition-curve: cubic-bezier(0.2, 0.9, 0.2, 1);
-  --transition-color: var(--theme-accent);
-  color: var(--theme-text);
-}
-
-body.theme-steph .wave-bg {
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.52) 100%),
-    url("assets/steph-curry-bg.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-body.theme-steph .wave-bg::before {
-  background: none;
-  opacity: 0;
-  filter: none;
-}
-
-body.theme-steph .wave-bg::after {
-  background: none;
-  opacity: 0;
-  filter: none;
-}
-
-body.theme-steph :is(
-  .app-sidebar,
-  .app-header,
-  .app-links-grid .app-link-card,
-  .upcoming-panel,
-  .daily-motivation-panel,
-  .games-panel-card,
-  .plinko-panel-card,
-  .all-schedules-panel-card,
-  .schedule-calendar,
-  .schedule-day-panel,
-  .schedule-day-column-card,
-  .whiteboard-embed-wrap,
-  .add-link-form,
-  .customisation-card,
-  .schedule-complete-card,
-  .streak-login-card,
-  .unlockable-style-card,
-  .app-edit-card,
-  .folder-view-card,
-  .folder-view-app-btn,
-  .store-app-card
-) {
-  background: var(--theme-surface);
-  border-color: var(--theme-border);
-  color: var(--theme-text);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45), 0 0 18px rgba(250, 204, 21, 0.14);
-}
-
-body.theme-steph :is(
-  .app-logo,
-  .section-title,
-  .upcoming-title,
-  .daily-motivation-title,
-  .games-panel-title,
-  .customisation-title,
-  .schedule-column-title,
-  .schedule-day-panel-title,
-  .group-modal-title,
-  .unlockable-styles-title
-) {
-  color: var(--theme-accent);
-}
-
-body.theme-steph :is(
-  .app-sidebar-title,
-  .app-user-email,
-  .upcoming-subtitle,
-  .upcoming-item-time,
-  .games-panel-text,
-  .daily-motivation-text,
-  .plinko-panel-cost,
-  .app-link-name,
-  .schedule-today,
-  .cal-head,
-  .schedule-day-field,
-  .schedule-day-activity-time,
-  .all-schedules-date-header,
-  .schedule-complete-card p,
-  .streak-login-card h3,
-  .streak-login-card p,
-  .unlockable-style-desc,
-  .unlockable-style-status,
-  .app-edit-subtitle,
-  .folder-view-app-name,
-  .store-app-description
-) {
-  color: var(--theme-muted);
-}
-
-body.theme-steph .store-app-title {
-  color: var(--theme-accent);
-}
-
-body.theme-steph .app-edit-title,
-body.theme-steph .folder-view-title {
-  color: var(--theme-accent);
-}
-
-body.theme-steph .folder-view-remove-btn {
-  background: var(--theme-surface-alt);
-  color: var(--theme-text);
-  border-color: var(--theme-border);
-}
-
-body.theme-steph .app-edit-overlay,
-body.theme-steph .folder-view-overlay,
-body.theme-steph .store-app-overlay {
-  background: rgba(0, 0, 0, 0.66);
-}
-
-body.theme-waterpokemon {
-  --theme-text: #eef7ff;
-  --theme-muted: #dbeafe;
-  --theme-surface: rgba(17, 31, 77, 0.78);
-  --theme-surface-alt: rgba(24, 41, 95, 0.84);
-  --theme-border: rgba(236, 72, 153, 0.45);
-  --theme-accent: #f472b6;
-  --theme-btn-radius: 14px;
-  --theme-transition-speed: 0.3s;
-  --theme-transition-curve: cubic-bezier(0.22, 1, 0.36, 1);
-  --transition-color: #38bdf8;
-  color: var(--theme-text);
-}
-
-body.theme-waterpokemon .wave-bg {
-  background:
-    linear-gradient(160deg, rgba(56, 189, 248, 0.42) 8%, rgba(236, 72, 153, 0.38) 92%),
-    linear-gradient(180deg, rgba(11, 30, 84, 0.35), rgba(30, 64, 175, 0.58)),
-    url("assets/water-pokemon-bg.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-body.theme-waterpokemon .wave-bg::before,
-body.theme-waterpokemon .wave-bg::after {
-  background: none;
-  opacity: 0;
-  filter: none;
-}
-
-body.theme-waterpokemon :is(
-  .app-sidebar,
-  .app-header,
-  .app-links-grid .app-link-card,
-  .upcoming-panel,
-  .daily-motivation-panel,
-  .games-panel-card,
-  .plinko-panel-card,
-  .all-schedules-panel-card,
-  .schedule-calendar,
-  .schedule-day-panel,
-  .schedule-day-column-card,
-  .whiteboard-embed-wrap,
-  .add-link-form,
-  .customisation-card,
-  .schedule-complete-card,
-  .streak-login-card,
-  .unlockable-style-card,
-  .app-edit-card,
-  .folder-view-card,
-  .folder-view-app-btn,
-  .store-app-card
-) {
-  background: var(--theme-surface);
-  border-color: var(--theme-border);
-  color: var(--theme-text);
-  box-shadow: 0 14px 30px rgba(2, 6, 23, 0.45), 0 0 18px rgba(236, 72, 153, 0.16);
-}
-
-body.theme-waterpokemon :is(
-  .app-logo,
-  .section-title,
-  .upcoming-title,
-  .daily-motivation-title,
-  .games-panel-title,
-  .customisation-title,
-  .schedule-column-title,
-  .schedule-day-panel-title,
-  .group-modal-title,
-  .unlockable-styles-title,
-  .store-app-title,
-  .app-edit-title,
-  .folder-view-title
-) {
-  color: var(--theme-accent);
-}
-
-body.theme-waterpokemon :is(
-  .app-sidebar-title,
-  .app-user-email,
-  .upcoming-subtitle,
-  .upcoming-item-time,
-  .games-panel-text,
-  .daily-motivation-text,
-  .plinko-panel-cost,
-  .app-link-name,
-  .schedule-today,
-  .cal-head,
-  .schedule-day-field,
-  .schedule-day-activity-time,
-  .all-schedules-date-header,
-  .schedule-complete-card p,
-  .streak-login-card h3,
-  .streak-login-card p,
-  .unlockable-style-desc,
-  .unlockable-style-status,
-  .app-edit-subtitle,
-  .folder-view-app-name,
-  .store-app-description
-) {
-  color: var(--theme-muted);
-}
-
-body.theme-waterpokemon :is(
-  .app-sidebar-item,
-  .custom-style-btn,
-  .plinko-back-btn,
-  .upcoming-view-all-btn,
-  .upcoming-status-btn,
-  .upcoming-delete-btn,
-  .add-link-btn-danger,
-  .add-link-input,
-  .schedule-day-time-input,
-  .schedule-day-select,
-  .cal-nav-select,
-  .cal-nav-btn,
-  .schedule-priority-select,
-  .unlockable-style-action,
-  .folder-view-remove-btn,
-  .tidal-store-app-btn,
-  .store-app-close-btn
-) {
-  background: var(--theme-surface-alt);
-  color: var(--theme-text);
-  border-color: var(--theme-border);
-}
-
-body.theme-waterpokemon :is(
-  .app-sidebar-item.is-active,
-  .custom-style-btn.is-active,
-  .upcoming-status-btn.is-active,
-  .add-link-btn
-) {
-  background: linear-gradient(135deg, #38bdf8, #f472b6);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 0 18px rgba(244, 114, 182, 0.34);
-}
-
-body.theme-waterpokemon .app-points,
-body.theme-waterpokemon .app-streak,
-body.theme-waterpokemon .app-shards {
-  background: rgba(16, 35, 94, 0.82);
-  border-color: var(--theme-border);
-  color: #fff;
-}
-
-body.theme-waterpokemon .app-edit-overlay,
-body.theme-waterpokemon .folder-view-overlay,
-body.theme-waterpokemon .store-app-overlay {
-  background: rgba(2, 6, 23, 0.64);
-}
-
-body.theme-waterpokemon .app-panel-fade-in {
-  animation: theme-waterpokemon-panel-in 0.34s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes theme-waterpokemon-panel-in {
-  0% { opacity: 0; transform: translateY(12px) scale(0.985); filter: saturate(0.85); }
-  100% { opacity: 1; transform: translateY(0) scale(1); filter: saturate(1); }
-}
-
-body.theme-space .store-app-card,
-body.theme-volcano .store-app-card,
-body.theme-forest .store-app-card,
-body.theme-sunset .store-app-card,
-body.theme-lavender .store-app-card,
-body.theme-neon .store-app-card,
-body.theme-sand .store-app-card,
-body.theme-midnight .store-app-card {
-  background: var(--theme-surface);
-  border-color: var(--theme-border);
-  color: var(--theme-text);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-
-body.theme-space .store-app-title,
-body.theme-volcano .store-app-title,
-body.theme-forest .store-app-title,
-body.theme-sunset .store-app-title,
-body.theme-lavender .store-app-title,
-body.theme-neon .store-app-title,
-body.theme-sand .store-app-title,
-body.theme-midnight .store-app-title {
-  color: var(--theme-accent);
-}
-
-body.theme-space .store-app-description,
-body.theme-volcano .store-app-description,
-body.theme-forest .store-app-description,
-body.theme-sunset .store-app-description,
-body.theme-lavender .store-app-description,
-body.theme-neon .store-app-description,
-body.theme-sand .store-app-description,
-body.theme-midnight .store-app-description {
-  color: var(--theme-muted);
-}
-
-body.theme-space .app-edit-title,
-body.theme-volcano .app-edit-title,
-body.theme-forest .app-edit-title,
-body.theme-sunset .app-edit-title,
-body.theme-lavender .app-edit-title,
-body.theme-neon .app-edit-title,
-body.theme-sand .app-edit-title,
-body.theme-midnight .app-edit-title,
-body.theme-space .folder-view-title,
-body.theme-volcano .folder-view-title,
-body.theme-forest .folder-view-title,
-body.theme-sunset .folder-view-title,
-body.theme-lavender .folder-view-title,
-body.theme-neon .folder-view-title,
-body.theme-sand .folder-view-title,
-body.theme-midnight .folder-view-title {
-  color: var(--theme-accent);
-}
-
-body.theme-space .app-edit-subtitle,
-body.theme-volcano .app-edit-subtitle,
-body.theme-forest .app-edit-subtitle,
-body.theme-sunset .app-edit-subtitle,
-body.theme-lavender .app-edit-subtitle,
-body.theme-neon .app-edit-subtitle,
-body.theme-sand .app-edit-subtitle,
-body.theme-midnight .app-edit-subtitle,
-body.theme-space .folder-view-app-name,
-body.theme-volcano .folder-view-app-name,
-body.theme-forest .folder-view-app-name,
-body.theme-sunset .folder-view-app-name,
-body.theme-lavender .folder-view-app-name,
-body.theme-neon .folder-view-app-name,
-body.theme-sand .folder-view-app-name,
-body.theme-midnight .folder-view-app-name {
-  color: var(--theme-text);
-}
-
-body.theme-space .folder-view-remove-btn,
-body.theme-volcano .folder-view-remove-btn,
-body.theme-forest .folder-view-remove-btn,
-body.theme-sunset .folder-view-remove-btn,
-body.theme-lavender .folder-view-remove-btn,
-body.theme-neon .folder-view-remove-btn,
-body.theme-sand .folder-view-remove-btn,
-body.theme-midnight .folder-view-remove-btn {
-  background: var(--theme-surface-alt);
-  color: var(--theme-text);
-  border-color: var(--theme-border);
-}
-
-body.theme-space .app-edit-overlay,
-body.theme-volcano .app-edit-overlay,
-body.theme-forest .app-edit-overlay,
-body.theme-sunset .app-edit-overlay,
-body.theme-lavender .app-edit-overlay,
-body.theme-neon .app-edit-overlay,
-body.theme-sand .app-edit-overlay,
-body.theme-midnight .app-edit-overlay,
-body.theme-space .folder-view-overlay,
-body.theme-volcano .folder-view-overlay,
-body.theme-forest .folder-view-overlay,
-body.theme-sunset .folder-view-overlay,
-body.theme-lavender .folder-view-overlay,
-body.theme-neon .folder-view-overlay,
-body.theme-sand .folder-view-overlay,
-body.theme-midnight .folder-view-overlay,
-body.theme-space .store-app-overlay,
-body.theme-volcano .store-app-overlay,
-body.theme-forest .store-app-overlay,
-body.theme-sunset .store-app-overlay,
-body.theme-lavender .store-app-overlay,
-body.theme-neon .store-app-overlay,
-body.theme-sand .store-app-overlay,
-body.theme-midnight .store-app-overlay {
-  background: rgba(2, 6, 23, 0.58);
-}
-
-body.theme-steph :is(
-  .app-sidebar-item,
-  .custom-style-btn,
-  .plinko-back-btn,
-  .upcoming-view-all-btn,
-  .upcoming-status-btn,
-  .upcoming-delete-btn,
-  .add-link-btn-danger,
-  .add-link-input,
-  .schedule-day-time-input,
-  .schedule-day-select,
-  .cal-nav-select,
-  .cal-nav-btn,
-  .schedule-priority-select,
-  .unlockable-style-action
-) {
-  background: var(--theme-surface-alt);
-  color: var(--theme-text);
-  border-color: var(--theme-border);
-}
-
-body.theme-steph :is(
-  .app-sidebar-item.is-active,
-  .custom-style-btn.is-active,
-  .upcoming-status-btn.is-active,
-  .add-link-btn
-) {
-  background: linear-gradient(135deg, #facc15, #ca8a04);
-  color: #111;
-  border-color: #facc15;
-  box-shadow: 0 0 18px rgba(250, 204, 21, 0.32);
-}
-
-body.theme-steph .app-panel-fade-in {
-  animation: theme-steph-panel-in 0.34s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes theme-steph-panel-in {
-  0% { opacity: 0; transform: translateY(10px) scale(0.99); filter: brightness(0.85); }
-  100% { opacity: 1; transform: translateY(0) scale(1); filter: brightness(1); }
-}
-
-body.theme-space :is(.add-link-btn, .app-sidebar-item, .upcoming-status-btn, .upcoming-delete-btn, .plinko-back-btn, .upcoming-view-all-btn, .custom-style-btn, .cal-nav-btn) {
-  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
-}
-
-body.theme-volcano :is(.add-link-btn, .app-sidebar-item, .upcoming-status-btn, .upcoming-delete-btn, .plinko-back-btn, .upcoming-view-all-btn, .custom-style-btn, .cal-nav-btn) {
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 8px 50%);
-}
-
-body.theme-neon :is(.add-link-btn, .app-sidebar-item, .upcoming-status-btn, .upcoming-delete-btn, .plinko-back-btn, .upcoming-view-all-btn, .custom-style-btn, .cal-nav-btn) {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 8px) 100%, 0 100%);
-}
-
-/* Keep readable text on style picker/sidebar buttons */
-body.theme-space .custom-style-btn,
-body.theme-volcano .custom-style-btn,
-body.theme-neon .custom-style-btn,
-body.theme-space .app-sidebar-item,
-body.theme-volcano .app-sidebar-item,
-body.theme-neon .app-sidebar-item {
-  clip-path: none;
-  padding-left: 0.9rem;
-}
-
-/* Strongly distinct backgrounds for each custom theme */
-body.theme-space .wave-bg {
-  background:
-    radial-gradient(2px 2px at 8% 18%, rgba(255, 255, 255, 0.95), transparent 70%),
-    radial-gradient(2px 2px at 32% 62%, rgba(224, 231, 255, 0.9), transparent 70%),
-    radial-gradient(1.5px 1.5px at 74% 22%, rgba(191, 219, 254, 0.9), transparent 72%),
-    radial-gradient(1.5px 1.5px at 88% 76%, rgba(216, 180, 254, 0.75), transparent 72%),
-    radial-gradient(720px 340px at 76% 80%, rgba(99, 102, 241, 0.32), transparent 66%),
-    linear-gradient(180deg, #02030f 0%, #0b1333 44%, #21145a 100%);
-}
-
-body.theme-volcano .wave-bg {
-  background:
-    repeating-linear-gradient(160deg, rgba(249, 115, 22, 0.07) 0 14px, transparent 14px 32px),
-    radial-gradient(780px 320px at 18% 96%, rgba(239, 68, 68, 0.5), transparent 65%),
-    radial-gradient(520px 220px at 82% 90%, rgba(251, 146, 60, 0.45), transparent 62%),
-    linear-gradient(180deg, #180606 0%, #451a10 40%, #7f1d1d 100%);
-}
-
-body.theme-forest .wave-bg {
-  background:
-    repeating-linear-gradient(0deg, rgba(34, 197, 94, 0.05) 0 9px, transparent 9px 24px),
-    radial-gradient(700px 260px at 20% 14%, rgba(74, 222, 128, 0.2), transparent 68%),
-    radial-gradient(820px 340px at 84% 88%, rgba(21, 128, 61, 0.32), transparent 68%),
-    linear-gradient(180deg, #052e16 0%, #14532d 52%, #0f3d23 100%);
-}
-
-body.theme-sunset .wave-bg {
-  background:
-    linear-gradient(155deg, rgba(251, 113, 133, 0.2) 0%, transparent 48%),
-    linear-gradient(28deg, rgba(251, 191, 36, 0.16) 5%, transparent 42%),
-    radial-gradient(760px 300px at 78% 88%, rgba(236, 72, 153, 0.34), transparent 66%),
-    linear-gradient(180deg, #4a044e 0%, #9d174d 45%, #fb7185 100%);
-}
-
-body.theme-lavender .wave-bg {
-  background:
-    radial-gradient(620px 260px at 14% 12%, rgba(216, 180, 254, 0.24), transparent 66%),
-    radial-gradient(820px 320px at 82% 84%, rgba(167, 139, 250, 0.34), transparent 70%),
-    repeating-linear-gradient(120deg, rgba(196, 181, 253, 0.08) 0 12px, transparent 12px 26px),
-    linear-gradient(180deg, #2e1065 0%, #5b21b6 48%, #7c3aed 100%);
-}
-
-body.theme-neon .wave-bg {
-  background:
-    repeating-linear-gradient(90deg, rgba(45, 212, 191, 0.12) 0 1px, transparent 1px 26px),
-    repeating-linear-gradient(0deg, rgba(34, 211, 238, 0.1) 0 1px, transparent 1px 26px),
-    radial-gradient(760px 280px at 84% 84%, rgba(16, 185, 129, 0.2), transparent 64%),
-    linear-gradient(180deg, #021411 0%, #042f2e 55%, #022c22 100%);
-}
-
-body.theme-sand .wave-bg {
-  background:
-    repeating-radial-gradient(circle at 50% 100%, rgba(180, 132, 74, 0.14) 0 22px, transparent 22px 46px),
-    radial-gradient(860px 340px at 20% 12%, rgba(251, 191, 36, 0.18), transparent 66%),
-    linear-gradient(180deg, #fff7e1 0%, #fef3c7 48%, #fcd99a 100%);
-}
-
-body.theme-midnight .wave-bg {
-  background:
-    radial-gradient(880px 360px at 86% 14%, rgba(59, 130, 246, 0.34), transparent 68%),
-    radial-gradient(780px 320px at 12% 88%, rgba(37, 99, 235, 0.28), transparent 66%),
-    linear-gradient(180deg, #01081e 0%, #10224e 52%, #1e3a8a 100%);
-}
-
-body.theme-sunset :is(.add-link-btn, .app-sidebar-item, .upcoming-status-btn, .upcoming-delete-btn, .plinko-back-btn, .upcoming-view-all-btn, .custom-style-btn, .cal-nav-btn):hover {
-  transform: translateY(-2px) scale(1.02);
-}
-
-body.theme-volcano :is(.add-link-btn, .app-sidebar-item, .upcoming-status-btn, .upcoming-delete-btn, .plinko-back-btn, .upcoming-view-all-btn, .custom-style-btn, .cal-nav-btn):hover {
-  transform: translateY(-1px) scale(1.03);
-}
-
-body.theme-space :is(.add-link-btn, .app-sidebar-item, .upcoming-status-btn, .upcoming-delete-btn, .plinko-back-btn, .upcoming-view-all-btn, .custom-style-btn, .cal-nav-btn):hover {
-  transform: translateY(-2px) skewX(-2deg);
-}
-
-body.theme-neon :is(.add-link-btn, .app-sidebar-item, .upcoming-status-btn, .upcoming-delete-btn, .plinko-back-btn, .upcoming-view-all-btn, .custom-style-btn, .cal-nav-btn):hover {
-  box-shadow: 0 0 0 1px rgba(45, 212, 191, 0.7), 0 0 12px rgba(45, 212, 191, 0.45);
-}
-
-body.theme-space .app-panel-fade-in { animation: theme-space-panel-in 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-body.theme-volcano .app-panel-fade-in { animation: theme-volcano-panel-in 0.24s cubic-bezier(0.68, -0.3, 0.32, 1.3) forwards; }
-body.theme-forest .app-panel-fade-in { animation: theme-forest-panel-in 0.36s ease-out forwards; }
-body.theme-sunset .app-panel-fade-in { animation: theme-sunset-panel-in 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-body.theme-lavender .app-panel-fade-in { animation: theme-lavender-panel-in 0.38s cubic-bezier(0.25, 0.9, 0.3, 1.2) forwards; }
-body.theme-neon .app-panel-fade-in { animation: theme-neon-panel-in 0.2s linear forwards; }
-body.theme-sand .app-panel-fade-in { animation: theme-sand-panel-in 0.46s ease-out forwards; }
-body.theme-midnight .app-panel-fade-in { animation: theme-midnight-panel-in 0.28s cubic-bezier(0.2, 0.9, 0.2, 1) forwards; }
-
-@keyframes theme-space-panel-in {
-  0% { opacity: 0; transform: translateY(14px) scale(0.98); filter: blur(2px); }
-  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-}
-
-@keyframes theme-volcano-panel-in {
-  0% { opacity: 0; transform: translateY(8px) scale(0.95); }
-  70% { opacity: 1; transform: translateY(-2px) scale(1.01); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes theme-forest-panel-in {
-  0% { opacity: 0; transform: translateX(-12px); }
-  100% { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes theme-sunset-panel-in {
-  0% { opacity: 0; transform: translateY(16px) rotate(-1deg); }
-  100% { opacity: 1; transform: translateY(0) rotate(0); }
-}
-
-@keyframes theme-lavender-panel-in {
-  0% { opacity: 0; transform: scale(0.96); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-@keyframes theme-neon-panel-in {
-  0% { opacity: 0; filter: contrast(1.6); }
-  100% { opacity: 1; filter: contrast(1); }
-}
-
-@keyframes theme-sand-panel-in {
-  0% { opacity: 0; transform: translateY(18px); filter: saturate(0.7); }
-  100% { opacity: 1; transform: translateY(0); filter: saturate(1); }
-}
-
-@keyframes theme-midnight-panel-in {
-  0% { opacity: 0; transform: translateY(10px); box-shadow: 0 0 0 rgba(59, 130, 246, 0); }
-  100% { opacity: 1; transform: translateY(0); box-shadow: 0 0 18px rgba(59, 130, 246, 0.14); }
-}

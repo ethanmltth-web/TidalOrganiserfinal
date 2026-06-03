@@ -6,14 +6,17 @@ $emailRaw = 'guest';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Whiteboard – TIDAL ORGANISER</title>
+  <title>Whiteboard – Bluely</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="whiteboard-page">
-  <div class="wave-bg" aria-hidden="true"></div>
+  <div class="theme-bg-stack" aria-hidden="true">
+    <div class="wave-bg wave-bg-classic"></div>
+    <div class="wave-bg wave-bg-dark"></div>
+  </div>
 
   <header class="whiteboard-page-header">
     <a href="app.html" class="whiteboard-back" id="whiteboard-back-link">← Back to app</a>
@@ -297,6 +300,8 @@ $emailRaw = 'guest';
 
       if (addTextBtn) addTextBtn.addEventListener('click', addTextBlock);
       var savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'ocean';
+      if (savedTheme !== 'ocean' && savedTheme !== 'dark') savedTheme = 'ocean';
+      document.body.classList.toggle('theme-ocean', savedTheme === 'ocean');
       document.body.classList.toggle('theme-dark', savedTheme === 'dark');
       if (backLink) {
         backLink.addEventListener('click', function (e) {
